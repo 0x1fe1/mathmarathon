@@ -4,36 +4,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
     <link rel="stylesheet" href="static/css/reset.css">
     <link rel="stylesheet" href="static/css/style.css">
     <title>Pango.page</title>
 
-    <style>
+    <!-- HACK -->
+    <!-- <meta http-equiv="Refresh" content="1000"> -->
 
+    <style>
+        body {
+            display: grid;
+            justify-items: center;
+            align-items: start;
+        }
+
+        #wrapper {
+            display: grid;
+            place-items: center;
+            position: relative;
+
+            padding: 3rem;
+            max-width: 60rem;
+            min-width: fit-content;
+        }
+
+        #apps {
+            display: grid;
+            place-items: center;
+            grid-template-columns: 1fr 1fr;
+
+            padding-top: 5rem;
+            gap: 1rem;
+        }
+
+        #apps>.app {
+            --bg-gap: 0.1rem;
+            --bg-thickness: 0.1rem;
+            --bg-color: #f0f;
+
+            display: grid;
+            place-items: center;
+            font-size: 4rem;
+
+            padding: 1rem;
+            border-radius: 1rem;
+            min-width: 32rem;
+            min-height: 10rem;
+
+            color: var(--color);
+            box-shadow: inset 0 0 0 .1rem var(--fg), inset 0 0 0 .2rem var(--color);
+        }
+
+        #apps>.app.mathmarathon {
+            --color: var(--accent);
+            --color-rgb: var(--accent-rgb);
+        }
+
+        #apps>.app.coming-soon {
+            --color: var(--blank);
+            --color-rgb: var(--blank-rgb);
+            filter: brightness(50%) contrast(0);
+        }
+
+        /* #theme-selector { */
+        /*     position: absolute; */
+        /*     inset: 0; */
+        /*     padding: 2rem; */
+        /* } */
+        /**/
+        /* #theme-selector * { */
+        /*     scale: 2; */
+        /* } */
+
+        .bg-stripes {
+            background-image:
+                repeating-linear-gradient(135deg,
+                    transparent 0 var(--bg-gap),
+                    rgb(var(--color-rgb), 0.2) var(--bg-gap) calc(var(--bg-gap) + var(--bg-thickness)))
+        }
+
+        .bg-stripes-cross {
+            background-image:
+                repeating-linear-gradient(45deg,
+                    transparent 0 var(--bg-gap),
+                    rgb(var(--color-rgb), 0.2) var(--gap) calc(var(--bg-gap) + var(--bg-thickness))),
+                repeating-linear-gradient(135deg,
+                    transparent 0 var(--bg-gap),
+                    rgb(var(--color-rgb), 0.2) var(--gap) calc(var(--bg-gap) + var(--bg-thickness)))
+        }
     </style>
 </head>
 
 <body>
+    <div id="wrapper">
+        <h1>Pango.page</h1>
+        <p>a tiny website</p>
 
-    <h1>Pango.page</h1>
-    <p>a tiny website</p>
-
-    <div id="apps">
-        <div id="app mathmarathon">
-            Mathmarathon
+        <div id="apps">
+            <a class="app mathmarathon bg-stripes">Mathmarathon</a>
+            <a class="app coming-soon bg-stripes">Coming Soon™</a>
+            <a class="app coming-soon bg-stripes">Coming Soon™</a>
+            <a class="app coming-soon bg-stripes">Coming Soon™</a>
         </div>
-        <div class="app coming_soon">Coming Soon™</div>
-        <div class="app coming_soon">Coming Soon™</div>
-        <div class="app coming_soon">Coming Soon™</div>
+
+        <label id="theme-selector">
+            <select data-theme-picker name="theme_picker" id="theme">
+                <option value="DARK">Dark</option>
+                <option value="LIGHT">Light</option>
+            </select>
+        </label>
+
+        <button type="button">Sign In</button>
     </div>
 
-    <label>
-        <select data-theme-picker name="theme_picker" id="theme">
-            <option value="SYSTEM">System</option>
-            <option value="LIGHT">Light</option>
-            <option value="DARK">Dark</option>
-        </select>
-    </label>
+    <script>
+        localStorage.setItem('THEME', 'DARK');
+    </script>
 </body>
 
 </html>
+
+<!-- TODO: localization https://phrase.com/blog/posts/step-step-guide-javascript-localization/ -->
