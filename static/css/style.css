@@ -1,0 +1,56 @@
+:root {
+    /* ctp-mantle */
+    --bg: #181825;
+    --fg: #cdd6f4;
+
+    /* ctp-blue */
+    --acc: #89b4fa;
+
+    /* red-500 */
+    --rank-1: #ef4444;
+
+    /* green-500 */
+    --rank-2: #22c55e;
+
+    /* blue-500 */
+    --rank-3: #3b82f6;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        /* ctp-mantle */
+        --bg: #181825;
+        --fg: #cdd6f4;
+
+        /* ctp-blue */
+        --acc: #89b4fa;
+    }
+}
+
+html {
+    color-scheme: dark light;
+}
+
+:root:has(#theme [value="LIGHT"]:checked) {
+    color-scheme: light;
+    --base: #cfcfcf;
+    --text: #212121;
+}
+
+:root:has(#theme [value="DARK"]:checked) {
+    color-scheme: dark;
+    --base: #212121;
+    --text: #cfcfcf;
+}
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 300%;
+}
