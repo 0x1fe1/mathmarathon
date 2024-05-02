@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
-    <link rel="stylesheet" href="static/css/reset.css">
-    <link rel="stylesheet" href="static/css/style.css">
     <title>Pango.page</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script defer src="/static/js/theme.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"
+        integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+        crossorigin="anonymous"></script>
 
-    <!-- HACK -->
-    <!-- <meta http-equiv="Refresh" content="1000"> -->
+    <!-- <meta http-equiv="Refresh" content="1"> -->
 
     <style>
         body {
@@ -34,7 +37,7 @@
             place-items: center;
             grid-template-columns: 1fr 1fr;
 
-            padding-top: 5rem;
+            padding-top: 10rem;
             gap: 1rem;
         }
 
@@ -45,11 +48,11 @@
 
             display: grid;
             place-items: center;
-            font-size: 4rem;
+            font-size: 3rem;
 
             padding: 1rem;
             border-radius: 1rem;
-            min-width: 32rem;
+            min-width: 30rem;
             min-height: 10rem;
 
             color: var(--color);
@@ -64,34 +67,38 @@
         #apps>.app.coming-soon {
             --color: var(--blank);
             --color-rgb: var(--blank-rgb);
-            filter: brightness(50%) contrast(0);
+            filter: brightness(50%);
+            background-color: transparent;
         }
 
-        /* #theme-selector { */
-        /*     position: absolute; */
-        /*     inset: 0; */
-        /*     padding: 2rem; */
-        /* } */
-        /**/
-        /* #theme-selector * { */
-        /*     scale: 2; */
-        /* } */
+        #account {
+            position: absolute;
+            right: 4rem;
+            top: 2rem;
 
-        .bg-stripes {
-            background-image:
-                repeating-linear-gradient(135deg,
-                    transparent 0 var(--bg-gap),
-                    rgb(var(--color-rgb), 0.2) var(--bg-gap) calc(var(--bg-gap) + var(--bg-thickness)))
+            width: 8rem;
+            height: 2rem;
+
+            color: var(--fg);
+            box-shadow: 0 0 0 0.1rem var(--fg);
+            border-radius: 1rem;
         }
 
-        .bg-stripes-cross {
-            background-image:
-                repeating-linear-gradient(45deg,
-                    transparent 0 var(--bg-gap),
-                    rgb(var(--color-rgb), 0.2) var(--gap) calc(var(--bg-gap) + var(--bg-thickness))),
-                repeating-linear-gradient(135deg,
-                    transparent 0 var(--bg-gap),
-                    rgb(var(--color-rgb), 0.2) var(--gap) calc(var(--bg-gap) + var(--bg-thickness)))
+        #account button {
+            width: 100%;
+            height: 100%;
+            font-size: 1.5rem;
+            background-color: transparent;
+            border: none;
+        }
+
+        #theme-selector {
+            left: 1.5rem;
+            top: 1.5rem;
+        }
+
+        h1 {
+            text-shadow: var(--blank) .2rem .2rem;
         }
     </style>
 </head>
@@ -102,25 +109,18 @@
         <p>a tiny website</p>
 
         <div id="apps">
-            <a class="app mathmarathon bg-stripes">Mathmarathon</a>
+            <a class="app mathmarathon bg-stripes" href="/mathmarathon">Mathmarathon</a>
             <a class="app coming-soon bg-stripes">Coming Soon™</a>
             <a class="app coming-soon bg-stripes">Coming Soon™</a>
             <a class="app coming-soon bg-stripes">Coming Soon™</a>
         </div>
 
-        <label id="theme-selector">
-            <select data-theme-picker name="theme_picker" id="theme">
-                <option value="DARK">Dark</option>
-                <option value="LIGHT">Light</option>
-            </select>
-        </label>
+        <div id="theme-selector"></div>
 
-        <button type="button">Sign In</button>
+        <div id="account">
+            <button type="button" hx-get="/signin" hx-swap="innerHTML">Sign In</button>
+        </div>
     </div>
-
-    <script>
-        localStorage.setItem('THEME', 'DARK');
-    </script>
 </body>
 
 </html>

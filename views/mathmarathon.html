@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mathmarathon</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="static/css/reset.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <script defer src="/static/js/theme.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"
+        integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+        crossorigin="anonymous"></script>
+
+    <!-- <meta http-equiv="Refresh" content="1"> -->
+
+    <style>
+        body {
+            display: grid;
+            justify-items: center;
+            align-items: start;
+        }
+
+        #wrapper {
+            display: grid;
+            place-items: center;
+            position: relative;
+
+            padding: 20rem 3rem 0 3rem;
+            max-width: 60rem;
+
+            gap: 2rem;
+            grid-template-columns: 25rem 25rem;
+            grid-template-rows: 10rem 10rem;
+            grid-template-areas:
+                "s g"
+                "r g";
+        }
+
+
+        #account {
+            position: absolute;
+            right: 0rem;
+            top: 2rem;
+
+            width: 8rem;
+            height: 2rem;
+
+            color: var(--fg);
+            box-shadow: 0 0 0 0.1rem var(--fg);
+            border-radius: 1rem;
+        }
+
+        #account button {
+            width: 100%;
+            height: 100%;
+            font-size: 1.5rem;
+            background-color: transparent;
+            border: none;
+        }
+
+        #settings,
+        #rankings,
+        #game {
+            --bg-gap: 0.1rem;
+            --bg-thickness: 0.1rem;
+            --color: var(--accent);
+            --color-rgb: var(--accent-rgb);
+
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 0 .1rem var(--fg), inset 0 0 0 .2rem var(--color);
+            font-size: 2.5rem;
+            border-radius: 2rem;
+            color: var(--color);
+        }
+
+        #settings {
+            grid-area: s;
+        }
+
+        #rankings {
+            grid-area: r;
+        }
+
+        #game {
+            grid-area: g;
+            font-size: 5rem;
+        }
+
+        a:not(#home) {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            border-radius: 2rem;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <a id="home" href="/">Pango.page</a>
+
+        <div id="theme-selector"></div>
+
+        <div id="settings" class="bg-stripes">
+            <a href="/mathmarathon/settings">⚙️ Settings</a>
+        </div>
+
+        <div id="rankings" class="bg-stripes">
+            <a href="/mathmarathon/rankings">📊 Global Rankings</a>
+        </div>
+
+        <div id="game" class="bg-stripes">
+            <a href="/mathmarathon/game">🎮 Play</a>
+        </div>
+
+        <div id="account">
+            <button type="button" hx-get="/signin" hx-swap="innerHTML">Sign In</button>
+        </div>
+    </div>
+</body>
+
+</html>
