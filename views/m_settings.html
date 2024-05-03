@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pango.page</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script defer src="/static/js/theme.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"
+        integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+        crossorigin="anonymous"></script>
+
+    <!-- <meta http-equiv="Refresh" content="1"> -->
+
+    <style>
+        body {
+            display: grid;
+            justify-items: center;
+            align-items: start;
+            grid-template-rows: 5rem 1rem 1fr;
+        }
+
+        main {
+            display: grid;
+            place-items: center;
+            position: relative;
+
+            padding: 3rem;
+            max-width: 80rem;
+
+            grid-template-rows: 5rem 1fr
+        }
+
+        a:not(#home) {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            border-radius: 2rem;
+        }
+
+        #cancel,
+        #confirm {
+            --bg-gap: 0.1rem;
+            --bg-thickness: 0.1rem;
+
+            padding: 0.5rem;
+            font-size: 2rem;
+            box-shadow: 0 0 0 .1rem var(--color), 0 0 0 .2rem var(--fg);
+            color: var(--color);
+            border-radius: 1rem;
+            background-color: transparent;
+            border-width: 0;
+        }
+
+        #cancel {
+            --color: var(--ctp-red);
+            --color-rgb: var(--ctp-red-rgb);
+        }
+
+        #confirm {
+            --color: var(--ctp-green);
+            --color-rgb: var(--ctp-green-rgb);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a id="home" href="/mathmarathon">Mathmarathon</a>
+        <div style="display:flex;flex-grow:10"></div>
+
+        <div id="theme-selector"></div>
+        <div style="display:flex;flex-grow:100"></div>
+
+        <button class="bg-stripes" id="cancel">CANCEL</button>
+        <div style="display:flex;flex-grow:25"></div>
+        <button class="bg-stripes" id="confirm">CONFIRM</button>
+
+        <div style="display:flex;flex-grow:100"></div>
+        <div id="account"><button type="button" hx-get="/signin" hx-swap="innerHTML">Sign In</button> </div>
+    </header>
+    <hr />
+    <main>
+        <div id="keys">KEYS</div>
+        <div id="values">VALUES</div>
+    </main>
+</body>
+
+</html>

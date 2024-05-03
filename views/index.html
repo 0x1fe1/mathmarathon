@@ -20,16 +20,16 @@
             display: grid;
             justify-items: center;
             align-items: start;
+            grid-template-rows: 5rem repeat(2, 1fr);
         }
 
-        #wrapper {
+        main {
             display: grid;
             place-items: center;
             position: relative;
 
-            padding: 3rem;
-            max-width: 60rem;
-            min-width: fit-content;
+            /* padding: 3rem; */
+            max-width: 80rem;
         }
 
         #apps {
@@ -71,42 +71,30 @@
             background-color: transparent;
         }
 
-        #account {
-            position: absolute;
-            right: 4rem;
-            top: 2rem;
-
-            width: 8rem;
-            height: 2rem;
-
-            color: var(--fg);
-            box-shadow: 0 0 0 0.1rem var(--fg);
-            border-radius: 1rem;
-        }
-
-        #account button {
-            width: 100%;
-            height: 100%;
-            font-size: 1.5rem;
-            background-color: transparent;
-            border: none;
-        }
-
-        #theme-selector {
-            left: 1.5rem;
-            top: 1.5rem;
-        }
-
         h1 {
             text-shadow: var(--blank) .2rem .2rem;
+            display: grid;
+            place-items: center;
+            gap: 2rem;
+        }
+
+        p {
+            text-shadow: var(--blank) .1rem .1rem;
+
         }
     </style>
 </head>
 
 <body>
-    <div id="wrapper">
-        <h1>Pango.page</h1>
-        <p>a tiny website</p>
+    <header>
+        <div id="theme-selector"></div>
+        <div style="display:flex;flex-grow:100"></div>
+        <div id="account"> <button type="button" hx-get="/signin" hx-swap="innerHTML">Sign In</button> </div>
+    </header>
+
+    <main>
+        <h1>Pango.page <p>a tiny website</p>
+        </h1>
 
         <div id="apps">
             <a class="app mathmarathon bg-stripes" href="/mathmarathon">Mathmarathon</a>
@@ -114,13 +102,8 @@
             <a class="app coming-soon bg-stripes">Coming Soon™</a>
             <a class="app coming-soon bg-stripes">Coming Soon™</a>
         </div>
-
-        <div id="theme-selector"></div>
-
-        <div id="account">
-            <button type="button" hx-get="/signin" hx-swap="innerHTML">Sign In</button>
-        </div>
-    </div>
+    </main>
+    <div></div>
 </body>
 
 </html>

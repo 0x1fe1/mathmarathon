@@ -20,8 +20,11 @@ func main() {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	http.Handle("/", loggingMiddleware(http.HandlerFunc(handle_index)))
-	http.Handle("/mathmarathon", loggingMiddleware(http.HandlerFunc(handle_mathmarathon)))
+	handle("/", "views/index.html")
+	handle("/mathmarathon", "views/mathmarathon.html")
+	handle("/mathmarathon/settings", "views/m_settings.html")
+	handle("/mathmarathon/rankings", "views/m_rankings.html")
+	handle("/mathmarathon/game", "views/m_game.html")
 
 	http.Handle("/signin", loggingMiddleware(http.HandlerFunc(handle_signin)))
 
@@ -29,14 +32,11 @@ func main() {
 	log.Fatal(http.ListenAndServe(":42069", nil))
 }
 
-func handle_index(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("views/index.html"))
-	tmpl.Execute(w, nil)
-}
-
-func handle_mathmarathon(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("views/mathmarathon.html"))
-	tmpl.Execute(w, nil)
+func handle(route, file string) {
+	http.Handle(route, loggingMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles(file))
+		tmpl.Execute(w, nil)
+	})))
 }
 
 var account_state = "Sign In"

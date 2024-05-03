@@ -19,46 +19,27 @@
         body {
             display: grid;
             justify-items: center;
-            align-items: start;
+            align-items: center;
+            grid-template-rows: 5rem repeat(3, 1fr);
         }
 
-        #wrapper {
+        main {
             display: grid;
             place-items: center;
             position: relative;
 
-            padding: 20rem 3rem 0 3rem;
-            max-width: 60rem;
+            padding: 3rem;
+            max-width: 80rem;
+            height: 100%;
 
             gap: 2rem;
-            grid-template-columns: 25rem 25rem;
+            grid-template-columns: 1fr 1fr;
             grid-template-rows: 10rem 10rem;
             grid-template-areas:
                 "s g"
                 "r g";
         }
 
-
-        #account {
-            position: absolute;
-            right: 0rem;
-            top: 2rem;
-
-            width: 8rem;
-            height: 2rem;
-
-            color: var(--fg);
-            box-shadow: 0 0 0 0.1rem var(--fg);
-            border-radius: 1rem;
-        }
-
-        #account button {
-            width: 100%;
-            height: 100%;
-            font-size: 1.5rem;
-            background-color: transparent;
-            border: none;
-        }
 
         #settings,
         #rankings,
@@ -95,33 +76,28 @@
             display: grid;
             place-items: center;
             border-radius: 2rem;
+            padding: 0 2rem;
         }
     </style>
 
 </head>
 
 <body>
-    <div id="wrapper">
+    <header>
         <a id="home" href="/">Pango.page</a>
-
+        <div style="display:flex;flex-grow:2"></div>
         <div id="theme-selector"></div>
+        <div style="display:flex;flex-grow:100"></div>
+        <div id="account"> <button type="button" hx-get="/signin" hx-swap="innerHTML">Sign In</button> </div>
+    </header>
 
-        <div id="settings" class="bg-stripes">
-            <a href="/mathmarathon/settings">⚙️ Settings</a>
-        </div>
-
-        <div id="rankings" class="bg-stripes">
-            <a href="/mathmarathon/rankings">📊 Global Rankings</a>
-        </div>
-
-        <div id="game" class="bg-stripes">
-            <a href="/mathmarathon/game">🎮 Play</a>
-        </div>
-
-        <div id="account">
-            <button type="button" hx-get="/signin" hx-swap="innerHTML">Sign In</button>
-        </div>
-    </div>
+    <div></div>
+    <main>
+        <div id="settings" class="bg-stripes"> <a href="/mathmarathon/settings">⚙️ Settings</a> </div>
+        <div id="rankings" class="bg-stripes"> <a href="/mathmarathon/rankings">📊 Global Rankings</a> </div>
+        <div id="game" class="bg-stripes"> <a href="/mathmarathon/game">🎮 Play</a> </div>
+    </main>
+    <div></div>
 </body>
 
 </html>
