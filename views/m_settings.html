@@ -23,17 +23,6 @@
             grid-template-rows: 5rem 1rem 1fr;
         }
 
-        main {
-            display: grid;
-            place-items: center;
-            position: relative;
-
-            padding: 3rem;
-            max-width: 80rem;
-
-            grid-template-rows: 5rem 1fr
-        }
-
         a:not(#home) {
             width: 100%;
             height: 100%;
@@ -65,6 +54,48 @@
             --color: var(--ctp-green);
             --color-rgb: var(--ctp-green-rgb);
         }
+
+
+
+        main {
+            display: grid;
+            place-items: center;
+            position: relative;
+
+            padding: 3rem;
+            max-width: 80rem;
+            width: 100%;
+            height: 100%;
+
+            grid-template-columns: 1fr 1rem 2fr
+        }
+
+        #keys,
+        #values {
+            display: grid;
+            place-items: center;
+            align-content: space-evenly;
+            grid-template-rows: repeat(4, 1fr);
+
+            width: 100%;
+            height: 100%;
+            font-size: 3rem;
+        }
+
+        #values select {
+            width: 90%;
+            height: 50%;
+            font-size: 3rem;
+            font-family: Virgil;
+            cursor: pointer;
+            padding-left: 1rem;
+            color: var(--fg);
+            /* border-radius: 1rem; */
+        }
+
+        .hrhrhr {
+            border: 10px solid red;
+        }
     </style>
 </head>
 
@@ -83,10 +114,55 @@
         <div style="display:flex;flex-grow:100"></div>
         <div id="account"><button type="button" hx-get="/signin" hx-swap="innerHTML">Sign In</button> </div>
     </header>
-    <hr />
+    <div style="width:100%;height:2px;background:var(--fg);"></div>
     <main>
-        <div id="keys">KEYS</div>
-        <div id="values">VALUES</div>
+        <div id="keys">
+            <div>Mode</div>
+            <div>Difficulty</div>
+            <div>Time</div>
+            <div>Length</div>
+        </div>
+        <div style="background: var(--fg);width:2px;height:100%;"></div>
+        <div id="values">
+            <select id="mode-select">
+                <optgroup label="Decimal">
+                    <option value="" selected>Integer (Decimal)</option>
+                    <option value="">Rational (Decimal)</option>
+                </optgroup>
+                <option value="" disabled></option>
+                <optgroup label="Dozenal">
+                    <option value="">Integer (Dozenal)</option>
+                    <option value="">Rational (Dozenal)</option>
+                </optgroup>
+                <option value="" disabled></option>
+                <optgroup label="Binary">
+                    <option value="">Count (Binary)</option>
+                    <option value="">Logic (Binary)</option>
+                </optgroup>
+                <option value="" disabled></option>
+                <optgroup label="Hexadecimal">
+                    <option value="">Count (Hex)</option>
+                    <option value="">Logic (Hex)</option>
+                </optgroup>
+            </select>
+            <select id="difficulty-select">
+                <option value="" selected>Easy</option>
+                <option value="">Medium</option>
+                <option value="">Hard</option>
+            </select>
+            <select id="time-select">
+                <option value="">10 Seconds</option>
+                <option value="">30 Seconds</option>
+                <option value="" selected>1 Minute</option>
+                <option value="">5 Minutes</option>
+            </select>
+            <select id="length-select">
+                <option value="">Tiny</option>
+                <option value="" selected>Short</option>
+                <option value="">Medium</option>
+                <option value="">Long</option>
+            </select>
+        </div>
     </main>
 </body>
 

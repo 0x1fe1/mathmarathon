@@ -33,10 +33,11 @@ func main() {
 }
 
 func handle(route, file string) {
-	http.Handle(route, loggingMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		tmpl := template.Must(template.ParseFiles(file))
-		tmpl.Execute(w, nil)
-	})))
+	http.Handle(route, loggingMiddleware(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			tmpl := template.Must(template.ParseFiles(file))
+			tmpl.Execute(w, nil)
+		})))
 }
 
 var account_state = "Sign In"
