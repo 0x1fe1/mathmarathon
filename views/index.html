@@ -20,24 +20,28 @@
             display: grid;
             justify-items: center;
             align-items: start;
-            grid-template-rows: 5rem repeat(2, 1fr);
+            grid-template-rows: 5rem 1fr;
+            padding: 0 3rem 3rem 3rem;
         }
 
         main {
             display: grid;
-            place-items: center;
-            position: relative;
+            justify-items: center;
+            align-items: start;
 
-            /* padding: 3rem; */
-            max-width: 80rem;
+            width: 100%;
+            height: 100%;
+            max-width: 65rem;
         }
 
         #apps {
             display: grid;
             place-items: center;
             grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
 
-            padding-top: 10rem;
+            width: 100%;
+            height: 100%;
             gap: 1rem;
         }
 
@@ -52,35 +56,39 @@
 
             padding: 1rem;
             border-radius: 1rem;
-            min-width: 30rem;
-            min-height: 10rem;
+            width: 100%;
+            height: 100%;
+            max-width: 30rem;
+            max-height: 10rem;
 
             color: var(--color);
-            box-shadow: inset 0 0 0 .1rem var(--fg), inset 0 0 0 .2rem var(--color);
+            text-shadow: rgb(var(--bg-rgb), 0.5) 0 0 .1rem;
+            box-shadow: inset 0 0 0 .2rem #f0f;
         }
 
         #apps>.app.mathmarathon {
             --color: var(--accent);
             --color-rgb: var(--accent-rgb);
+            box-shadow: inset 0 0 0 .2rem var(--color);
         }
 
         #apps>.app.coming-soon {
-            --color: var(--blank);
-            --color-rgb: var(--blank-rgb);
-            filter: brightness(50%);
-            background-color: transparent;
+            --color: var(--fg);
+            --color-rgb: var(--fg-rgb);
+            /* filter: contrast(0) opacity(50%); */
+            opacity: 33%;
+            box-shadow: inset 0 0 0 .2rem var(--color);
         }
 
         h1 {
-            text-shadow: var(--blank) .2rem .2rem;
+            text-shadow: rgb(var(--fg-rgb), 0.5) .2rem .2rem;
             display: grid;
             place-items: center;
             gap: 2rem;
         }
 
         p {
-            text-shadow: var(--blank) .1rem .1rem;
-
+            text-shadow: rgb(var(--fg-rgb), 0.5) .1rem .1rem;
         }
     </style>
 </head>
@@ -97,13 +105,12 @@
         </h1>
 
         <div id="apps">
-            <a class="app mathmarathon bg-stripes" href="/mathmarathon">Mathmarathon</a>
-            <a class="app coming-soon bg-stripes">Coming Soon™</a>
-            <a class="app coming-soon bg-stripes">Coming Soon™</a>
-            <a class="app coming-soon bg-stripes">Coming Soon™</a>
+            <a class="app mathmarathon bg-stripes unselectable" href="/mathmarathon">Mathmarathon</a>
+            <a class="app coming-soon bg-stripes unselectable">Coming Soon™</a>
+            <a class="app coming-soon bg-stripes unselectable">Coming Soon™</a>
+            <a class="app coming-soon bg-stripes unselectable">Coming Soon™</a>
         </div>
     </main>
-    <div></div>
 </body>
 
 </html>

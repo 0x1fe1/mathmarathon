@@ -2,6 +2,9 @@
     /* ctp-base */
     --bg: #1e1e2e;
     --bg-rgb: 30, 30, 46;
+    /* ctp-mantle */
+    --bg-accent: #181825;
+    --bg-accent-rgb: 24, 24, 37;
     /* ctp-text */
     --fg: #cdd6f4;
     --fg-rgb: 205, 214, 244;
@@ -9,8 +12,8 @@
     --accent: #89b4fa;
     --accent-rgb: 137, 180, 250;
     /* ctp-overlay-0 */
-    --blank: #6c7086;
-    --blank-rgb: 108, 112, 134;
+    --blank: #313244;
+    --blank-rgb: 49, 50, 68;
 
     --ctp-red: #f38ba8;
     --ctp-red-rgb: 243, 139, 168;
@@ -31,6 +34,8 @@
     :root {
         --bg: #eff1f5;
         --bg-rgb: 239, 241, 245;
+        --bg-accent: #e6e9ef;
+        --bg-accent-rgb: 230, 233, 239;
         --fg: #4c4f69;
         --fg-rgb: 76, 79, 105;
         --accent: #1e66f5;
@@ -46,14 +51,12 @@
     }
 }
 
-html {
-    color-scheme: dark light;
-}
-
 :root:has(#theme-selector [data-theme="LIGHT"]) {
     color-scheme: light;
     --bg: #eff1f5;
     --bg-rgb: 239, 241, 245;
+    --bg-accent: #e6e9ef;
+    --bg-accent-rgb: 230, 233, 239;
     --fg: #4c4f69;
     --fg-rgb: 76, 79, 105;
     --accent: #1e66f5;
@@ -66,6 +69,10 @@ html {
     --ctp-green-rgb: 64, 160, 43;
     --ctp-blue: #1e66f5;
     --ctp-blue-rgb: 30, 102, 245;
+}
+
+html {
+    color-scheme: dark light;
 }
 
 :root:has(#theme-selector [data-theme="DARK"]) {
@@ -106,14 +113,15 @@ button {
 button:hover,
 button:focus,
 a:focus {
-    filter: contrast(150%);
+    filter: contrast(150%) brightness(125%);
     background-color: rgb(var(--accent-rgb), 0.25);
+    transform: scale(1.025);
 }
 
 button:focus,
 a:focus {
     outline: 2px solid var(--fg);
-    outline-offset: -4px;
+    outline-offset: 4px;
 }
 
 button:active {
@@ -125,10 +133,6 @@ a {
     border-radius: 1rem;
     font: inherit;
     color: inherit;
-
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 a:link {
@@ -151,13 +155,23 @@ a:active {
 }
 
 
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
 
 
 .bg-stripes {
     background-image:
         repeating-linear-gradient(135deg,
             transparent 0 var(--bg-gap),
-            rgb(var(--color-rgb), 0.2) var(--bg-gap) calc(var(--bg-gap) + var(--bg-thickness)))
+            rgb(var(--color-rgb), 0.25) var(--bg-gap) calc(var(--bg-gap) + var(--bg-thickness)))
 }
 
 .bg-stripes-cross {
@@ -195,12 +209,12 @@ a:active {
     height: fit-content;
     padding: 1rem;
     font-size: 2rem;
-    text-shadow: var(--blank) .1rem .1rem;
+    text-shadow: rgb(var(--fg-rgb), 0.5) .1rem .1rem;
 }
 
 header {
-    width: 60rem;
-    max-width: 80rem;
+    width: 100%;
+    max-width: 60rem;
     height: 100%;
 
     display: flex;
