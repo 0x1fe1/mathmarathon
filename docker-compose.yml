@@ -1,0 +1,36 @@
+services:
+  db:
+    image: "postgres:16.2-alpine"
+    environment:
+      - POSTGRES_DB=mydb
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+    ports:
+      - '5432:5432'
+    volumes:
+      - app_db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d mydb -U myuser" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mm_network
+
+  app:
+    build: .
+    ports:
+      - '8080:8080'
+      - '10069:10069'
+      - '10070:10070'
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - mm_network
+
+volumes:
+  app_db:
+
+networks:
+  mm_network:

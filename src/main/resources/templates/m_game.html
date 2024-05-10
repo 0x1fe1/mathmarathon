@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Game</title>
+    <link href="/images/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="/css/reset.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <script defer src="/js/theme.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+            src="https://unpkg.com/htmx.org@1.9.12"></script>
+
+    <!-- <meta http-equiv="Refresh" content="1"> -->
+
+    <style>
+        body {
+            display: grid;
+            justify-items: center;
+            align-items: start;
+            grid-template-rows: 5rem 1rem 1fr;
+        }
+
+        a:not(#home) {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            border-radius: 2rem;
+        }
+
+        #toggle-game {
+            --bg-gap: 0.1rem;
+            --bg-thickness: 0.1rem;
+
+            padding: 0.5rem;
+            font-size: 2rem;
+            box-shadow: 0 0 0 .15rem var(--color);
+            color: var(--color);
+            border-radius: 1rem;
+            background-color: transparent;
+            border-width: 0;
+        }
+
+        #toggle-game[data-started="false"] {
+            --color: var(--ctp-green);
+            --color-rgb: var(--ctp-green-rgb);
+        }
+
+        #toggle-game[data-started="true"] {
+            --color: var(--ctp-red);
+            --color-rgb: var(--ctp-red-rgb);
+        }
+
+        #toggle-game[data-started="false"]::before {
+            content: "START";
+        }
+
+        #toggle-game[data-started="true"]::before {
+            content: "STOP";
+        }
+
+        #timer {
+            font-size: 2rem;
+        }
+
+        #timer::before {
+            content: "⏱️ ";
+        }
+
+        main {
+            display: grid;
+            place-items: center;
+            grid-template-rows: 4fr 1fr;
+
+            padding: 3rem;
+            max-width: 60rem;
+            width: 100%;
+            height: 100%;
+        }
+
+        #answer {
+            max-height: 10rem;
+        }
+
+        #answer label {
+            color: var(--fg);
+            font-size: 2rem;
+        }
+
+        #answer-text {
+            font-family: Virgil;
+            font-size: 2rem;
+            color: var(--fg);
+            padding: 0.5rem 1rem;
+        }
+
+        #answer-submit {
+            --bg-gap: 0.1rem;
+            --bg-thickness: 0.1rem;
+            --color: var(--ctp-blue);
+            --color-rgb: var(--ctp-blue-rgb);
+
+            padding: 0.5rem;
+            font-size: 2rem;
+            font-family: Virgil;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 0 0 .15rem var(--color);
+            color: var(--color);
+            border-radius: 1rem;
+            background-color: transparent;
+            border-width: 0;
+        }
+
+        #expression {
+            display: grid;
+            place-items: center;
+            width: 100%;
+            height: 100%;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-areas: "l c r";
+        }
+
+        #expression #left {
+            grid-area: l;
+            font-size: 3rem;
+            color: rgb(var(--fg-rgb), 0.5);
+        }
+
+        #expression #center {
+            grid-area: c;
+            font-size: 6rem;
+        }
+
+        #expression #right {
+            grid-area: r;
+            font-size: 3rem;
+            color: rgb(var(--fg-rgb), 0.5);
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <a href="/mathmarathon" id="home">Mathmarathon</a>
+    <div style="display:flex;flex-grow:10"></div>
+    <div id="theme-selector"></div>
+
+    <div style="display:flex;flex-grow:100"></div>
+    <div id="timer">1:23</div>
+    <div style="display:flex;flex-grow:100"></div>
+
+    <button class="bg-stripes" data-started="false" id="toggle-game"></button>
+    <div style="display:flex;flex-grow:10"></div>
+</header>
+<div style="width:100%;height:2px;background:var(--fg);"></div>
+<main>
+    <div id="expression">
+        <div id="left">
+            <span id="opd-last">+34</span>
+        </div>
+        <div id="center">
+            <span id="opd-mid-last">+9</span>
+            <span id="opd-mid-first">-10</span>
+        </div>
+        <div id="right">
+            <span id="opd-first">-12</span>
+        </div>
+    </div>
+    <form action="" id="answer">
+        <!-- <label for="answer">Answer:</label> -->
+        <input id="answer-text" name="answer" placeholder="Answer" type="number" value=""></input>
+        <input class="bg-stripes" id="answer-submit" type="submit" value="Submit"></input>
+    </form>
+</main>
+</body>
+
+</html>
