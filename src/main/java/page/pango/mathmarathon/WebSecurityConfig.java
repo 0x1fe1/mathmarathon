@@ -14,7 +14,9 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/", "/mathmarathon", "/mathmarathon/settings", "/mathmarathon/game", "/mathmarathon/rankings").permitAll()
+                .requestMatchers("/", "/mathmarathon", "/mathmarathon/settings",
+                    "/mathmarathon/game", "/mathmarathon/game/results",
+                    "/mathmarathon/rankings").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**").permitAll()
                 .anyRequest().authenticated()
             )

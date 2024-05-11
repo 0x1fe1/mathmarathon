@@ -11,7 +11,8 @@
 </header>
 
 <main>
-    <h1>Pango.page <p style="text-shadow:rgb(var(--fg-rgb),0.5) .1rem .1rem;">a tiny website</p></h1>
+    <h1>Pango.page <p style="text-shadow:rgb(var(--fg-rgb),0.5) .1rem .1rem;">a tiny
+        website</p></h1>
 
     <div id="apps">
         <a class="app mathmarathon bg-stripes unselectable" th:href="@{/mathmarathon}">Mathmarathon</a>
@@ -30,27 +31,30 @@
         justify-items: center;
         align-items: start;
         grid-template-rows: 5rem 1fr;
-        padding: 0 3rem 3rem 3rem;
+        /*padding: 0 3rem 3rem 3rem;*/
     }
 
     main {
         display: grid;
         justify-items: center;
         align-items: start;
+        /*align-content: space-evenly;*/
 
         width: 100%;
         height: 100%;
         max-width: 65rem;
+        /*grid-template-columns: 1fr 1fr;*/
+        /*grid-template-rows: fit-content(0) 1fr;*/
     }
 
     #apps {
         display: grid;
         place-items: center;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-columns: repeat(2, fit-content(30rem));
+        grid-template-rows: repeat(2, fit-content(10rem));
 
-        width: 100%;
-        height: 100%;
+        /*width: 100%;*/
+        /*height: 100%;*/
         gap: 1rem;
     }
 
@@ -63,12 +67,10 @@
         place-items: center;
         font-size: 3rem;
 
-        padding: 1rem;
+        padding: 0 1rem;
         border-radius: 1rem;
-        width: 100%;
-        height: 100%;
-        max-width: 30rem;
-        max-height: 10rem;
+        width: clamp(20rem, 100%, 30rem);
+        height: 8rem;
 
         color: var(--color);
         text-shadow: rgb(var(--bg-rgb), 0.5) 0 0 .1rem;

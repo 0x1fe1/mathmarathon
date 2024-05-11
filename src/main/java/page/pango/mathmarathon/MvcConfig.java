@@ -13,5 +13,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/mathmarathon").setViewName("mathmarathon");
         registry.addViewController("/mathmarathon/settings").setViewName("m_settings");
         registry.addViewController("/mathmarathon/game").setViewName("m_game");
+        registry.addViewController("/mathmarathon/game/results").setViewName("m_game_results");
+        registry.addViewController("/mathmarathon/game/results/submit").setViewName("m_game_results_submit");
     }
 }

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head ::head}"><title></title></head>
+
+<script defer>
+    window.onload = function () {
+        document.querySelector("#submit").addEventListener("click", (e) => {
+            e.preventDefault();
+            window.location.href = "/mathmarathon/game/results/submit";
+        })
+
+        const settings = JSON.parse(localStorage.getItem("SETTINGS"));
+
+        const expr_div = document.querySelector("#expr-container");
+        const true_answer_div = document.querySelector("#true-answer");
+        const user_answer_div = document.querySelector("#user-answer");
+        const score_div = document.querySelector("#score");
+
+        const expression = JSON.parse(localStorage.getItem("EXPRESSION") ?? "[]");
+        const true_answer = eval_expr(expression);
+        const user_answer = JSON.parse(localStorage.getItem("USER-ANSWER") ?? "0").answer;
+        const score = calculate_score(settings, true_answer, user_answer);
+
+        expr_div.innerHTML = expression.join(" ").replaceAll("*", "×");
+        true_answer_div.innerHTML = true_answer.toString();
+        user_answer_div.innerHTML = user_answer;
+        score_div.innerHTML = `${score} / 100`;
+    };
+
+    const TABLE = {
+        length: {
+            "TINY": 0.25,
+            "SHORT": 0.5,
+            "MEDIUM": 1,
+            "LONG": 1.25,
+        },
+        time: {
+            "10S": 1.25,
+            "30S": 1,
+            "1M": 0.75,
+            "5M": 0.5,
+        },
+        difficulty: {
+            "EASY": 0.67,
+            "MEDIUM": 1,
+            "HARD": 1.33,
+        },
+    }
+
+    function calculate_score(settings, true_answer, answer) {
+        const difficulty_mult = TABLE.difficulty[settings.difficulty];
+        const length_mult = TABLE.length[settings.length];
+        const time_mult = TABLE.time[settings.time];
+
+        let error_delta = Math.abs((answer || 1) / (true_answer || 1));
+
+        const correctness_mult = Math.max(0, Math.min(1, Math.exp(-4 * Math.pow(error_delta - 1, 2))));
+
+        // console.log({settings, true_answer, answer, correctness_mult, difficulty_mult, length_mult, time_mult})
+
+        return Math.min(Math.ceil(100 * correctness_mult * difficulty_mult * length_mult * time_mult), 100);
+    }
+
+    function eval_expr(expr) {
+        let answer = 0;
+        for (let i = 0; i < expr.length; i++) {
+            answer = eval(`${answer}${expr[i]}`)
+        }
+        return answer;
+    }
+</script>
+
+<body>
+<header>
+    <a href="/mathmarathon" id="home">Mathmarathon</a>
+    <div style="display:flex;flex-grow:10"></div>
+    <div id="theme-selector"></div>
+    <div style="display:flex;flex-grow:100"></div>
+
+    <button class="bg-stripes" id="submit"></button>
+    <div style="display:flex;flex-grow:10"></div>
+</header>
+<div style="width:100%;height:2px;background:var(--fg);"></div>
+<main>
+
+    <div id="keys">
+        <div class="key">Expression</div>
+        <div class="key">True Answer</div>
+        <div class="key">Your Answer</div>
+        <div class="key">Score</div>
+    </div>
+    <div style="background: var(--fg);width:2px;height:100%;"></div>
+    <div id="values">
+        <div class="value" id="expression">
+            <div id="expr-container"></div>
+        </div>
+        <div class="value" id="true-answer"></div>
+        <div class="value" id="user-answer"></div>
+        <div class="value" id="score"></div>
+    </div>
+
+</main>
+</body>
+
+
+<style>
+    body {
+        display: grid;
+        justify-items: center;
+        align-items: start;
+        grid-template-rows: 5rem 1rem 1fr;
+    }
+
+    a:not(#home) {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        border-radius: 2rem;
+    }
+
+    main {
+        display: grid;
+        place-items: center;
+        position: relative;
+
+        padding: 3rem;
+        max-width: 60rem;
+        width: 100%;
+        height: 100%;
+
+        grid-template-columns: 2fr 1rem 3fr;
+    }
+
+    #keys,
+    #values {
+        display: grid;
+        place-items: center;
+        grid-template-rows: repeat(4, 1fr);
+
+        width: 100%;
+        height: 100%;
+        font-size: 3rem;
+    }
+
+    .key {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        text-wrap: nowrap;
+    }
+
+    .value {
+        width: 90%;
+        height: 5rem;
+        display: grid;
+        place-items: center;
+
+        font-size: 3rem;
+        color: var(--fg);
+        font-family: Virgil, monospace;
+        border-radius: 1rem;
+        background: var(--bg-accent);
+    }
+
+    #expression {
+        overflow-x: auto;
+        text-wrap: nowrap;
+        padding: 0 2rem;
+    }
+
+
+    #submit {
+        --color: var(--ctp-green);
+        --color-rgb: var(--ctp-green-rgb);
+        --bg-gap: 0.1rem;
+        --bg-thickness: 0.1rem;
+
+        padding: 0.5rem;
+        font-size: 2rem;
+        box-shadow: 0 0 0 .15rem var(--color);
+        color: var(--color);
+        border-radius: 1rem;
+        background-color: transparent;
+        border-width: 0;
+        width: 10rem;
+    }
+
+    #submit::before {
+        content: "Submit";
+    }
+</style>
+
+</html>

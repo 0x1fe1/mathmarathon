@@ -3,8 +3,8 @@
     --bg: #1e1e2e;
     --bg-rgb: 30, 30, 46;
     /* ctp-mantle */
-    --bg-accent: #181825;
-    --bg-accent-rgb: 24, 24, 37;
+    --bg-accent: #11111b;
+    --bg-accent-rgb: 17, 17, 27;
     /* ctp-text */
     --fg: #cdd6f4;
     --fg-rgb: 205, 214, 244;
@@ -36,8 +36,8 @@
     :root {
         --bg: #eff1f5;
         --bg-rgb: 239, 241, 245;
-        --bg-accent: #e6e9ef;
-        --bg-accent-rgb: 230, 233, 239;
+        --bg-accent: #dce0e8;
+        --bg-accent-rgb: 220, 224, 232;
         --fg: #4c4f69;
         --fg-rgb: 76, 79, 105;
         --accent: #1e66f5;
@@ -59,8 +59,8 @@
     color-scheme: light;
     --bg: #eff1f5;
     --bg-rgb: 239, 241, 245;
-    --bg-accent: #e6e9ef;
-    --bg-accent-rgb: 230, 233, 239;
+    --bg-accent: #dce0e8;
+    --bg-accent-rgb: 220, 224, 232;
     --fg: #4c4f69;
     --fg-rgb: 76, 79, 105;
     --accent: #1e66f5;
