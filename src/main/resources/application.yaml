@@ -10,16 +10,25 @@ spring:
     livereload:
       enabled: true
       port: 6970
-  security:
-    oauth2:
-      client:
-        registration:
-          github:
-            client-id: Ov23liXTIyyu5HERA0HA
-            client-secret: f34238f54a77d3c41e6f4887914604816289ad80
-          google:
-            client-id: 658811187352-av5377ahf62ur75uhg3gch2irnhindbj.apps.googleusercontent.com
-            client-secret: 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
+  datasource:
+    url: "jdbc:postgresql://db:5432/mydb"
+    username: myuser
+    password: mypassword
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          github:
+#            client-id: Ov23liXTIyyu5HERA0HA
+#            client-secret: f34238f54a77d3c41e6f4887914604816289ad80
+#          google:
+#            client-id: 658811187352-av5377ahf62ur75uhg3gch2irnhindbj.apps.googleusercontent.com
+#            client-secret: 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
 server:
   tomcat:
     remoteip:

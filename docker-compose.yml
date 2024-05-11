@@ -17,17 +17,17 @@ services:
     networks:
       - mm_network
 
-  app:
-    build: .
-    ports:
-      - '8080:8080'
-      - '10069:10069'
-      - '10070:10070'
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - mm_network
+  # app:
+  #   build: .
+  #   ports:
+  #     - '8080:8080'
+  #     - '10069:10069'
+  #     - '10070:10070'
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   networks:
+  #     - mm_network
 
 volumes:
   app_db:
