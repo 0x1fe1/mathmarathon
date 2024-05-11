@@ -1,85 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Mathmarathon</title>
-    <link href="/images/favicon.ico" rel="icon" type="image/x-icon">
-    <link href="/css/reset.css" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet">
-    <script defer src="/js/theme.js"></script>
-    <script crossorigin="anonymous"
-            integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
-            src="https://unpkg.com/htmx.org@1.9.12"></script>
-
-    <!-- <meta http-equiv="Refresh" content="1"> -->
-
-    <style>
-        body {
-            display: grid;
-            justify-items: center;
-            align-items: center;
-            grid-template-rows: 5rem repeat(3, 1fr);
-        }
-
-        main {
-            display: grid;
-            place-items: center;
-
-            padding: 3rem;
-            max-width: 60rem;
-            height: 100%;
-
-            gap: 2rem;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 10rem 10rem;
-            grid-template-areas:
-                "s g"
-                "r g";
-        }
-
-
-        #settings,
-        #rankings,
-        #game {
-            --bg-gap: 0.1rem;
-            --bg-thickness: 0.1rem;
-            --color: var(--accent);
-            --color-rgb: var(--accent-rgb);
-
-            width: 100%;
-            height: 100%;
-            box-shadow: inset 0 0 0 .1rem var(--fg), inset 0 0 0 .2rem var(--color);
-            font-size: 2.5rem;
-            border-radius: 2rem;
-            color: var(--color);
-        }
-
-        #settings {
-            grid-area: s;
-        }
-
-        #rankings {
-            grid-area: r;
-        }
-
-        #game {
-            grid-area: g;
-            font-size: 5rem;
-        }
-
-        a {
-            width: 100%;
-            height: 100%;
-            display: grid;
-            place-items: center;
-            border-radius: 2rem;
-            padding: 0 2rem;
-        }
-    </style>
-
-</head>
+<head th:replace="~{fragments/head ::head}"><title></title></head>
 
 <body>
 <header>
@@ -87,7 +9,7 @@
     <div style="display:flex;flex-grow:2"></div>
     <div id="theme-selector"></div>
     <div style="display:flex;flex-grow:100"></div>
-    <div id="account"><a id="signin" th:href="@{/login}">Sign In</a></div>
+    <div id="account"><a id="signin" th:href="@{/signin}">Sign In</a></div>
 </header>
 
 <div></div>
@@ -98,5 +20,69 @@
 </main>
 <div></div>
 </body>
+
+<style>
+    body {
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        grid-template-rows: 5rem repeat(3, 1fr);
+    }
+
+    main {
+        display: grid;
+        place-items: center;
+
+        padding: 3rem;
+        max-width: 60rem;
+        height: 100%;
+
+        gap: 2rem;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 10rem 10rem;
+        grid-template-areas:
+                "s g"
+                "r g";
+    }
+
+
+    #settings,
+    #rankings,
+    #game {
+        --bg-gap: 0.1rem;
+        --bg-thickness: 0.1rem;
+        --color: var(--accent);
+        --color-rgb: var(--accent-rgb);
+
+        width: 100%;
+        height: 100%;
+        box-shadow: inset 0 0 0 .1rem var(--fg), inset 0 0 0 .2rem var(--color);
+        font-size: 2.5rem;
+        border-radius: 2rem;
+        color: var(--color);
+    }
+
+    #settings {
+        grid-area: s;
+    }
+
+    #rankings {
+        grid-area: r;
+    }
+
+    #game {
+        grid-area: g;
+        font-size: 5rem;
+    }
+
+    a {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        border-radius: 2rem;
+        padding: 0 2rem;
+    }
+</style>
 
 </html>

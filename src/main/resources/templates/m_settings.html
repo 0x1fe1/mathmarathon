@@ -1,98 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Settings</title>
-    <link href="/images/favicon.ico" rel="icon" type="image/x-icon">
-    <link href="/css/reset.css" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet">
-    <script defer src="/js/theme.js"></script>
-    <script crossorigin="anonymous"
-            integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
-            src="https://unpkg.com/htmx.org@1.9.12"></script>
+<head th:replace="~{fragments/head ::head}"><title></title></head>
 
-    <!-- <meta http-equiv="Refresh" content="1"> -->
+<script defer>
+    window.onload = function () {
+        pull_settings();
 
-    <style>
-        body {
-            display: grid;
-            justify-items: center;
-            align-items: start;
-            grid-template-rows: 5rem 1rem 1fr;
+        const form = document.querySelector("#values");
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const data_raw = new FormData(form);
+            const data = {};
+            for (const [key, value] of data_raw) {
+                data[key] = value;
+            }
+            localStorage.setItem("SETTINGS", JSON.stringify(data));
+            // console.log(JSON.parse(localStorage.getItem("SETTINGS")));
+        })
+    };
+
+    function pull_settings() {
+        const settings = localStorage.getItem("SETTINGS")
+        if (settings == null) return;
+
+        for (const [key, value] of Object.entries(JSON.parse(settings))) {
+            document.querySelector(`select#${key}`).value = value;
         }
-
-        a {
-            width: 100%;
-            height: 100%;
-            display: grid;
-            place-items: center;
-            border-radius: 2rem;
-        }
-
-        #cancel,
-        #confirm {
-            --bg-gap: 0.1rem;
-            --bg-thickness: 0.1rem;
-
-            padding: 0.5rem;
-            font-size: 2rem;
-            box-shadow: 0 0 0 .1rem var(--color);
-            color: var(--color);
-            border-radius: 1rem;
-            background-color: transparent;
-            border-width: 0;
-        }
-
-        #cancel {
-            --color: var(--ctp-red);
-            --color-rgb: var(--ctp-red-rgb);
-        }
-
-        #confirm {
-            --color: var(--ctp-green);
-            --color-rgb: var(--ctp-green-rgb);
-        }
-
-
-        main {
-            display: grid;
-            place-items: center;
-            position: relative;
-
-            padding: 3rem;
-            max-width: 60rem;
-            width: 100%;
-            height: 100%;
-
-            grid-template-columns: 1fr 1rem 2fr
-        }
-
-        #keys,
-        #values {
-            display: grid;
-            place-items: center;
-            align-content: space-evenly;
-            grid-template-rows: repeat(4, 1fr);
-
-            width: 100%;
-            height: 100%;
-            font-size: 3rem;
-        }
-
-        #values select {
-            width: 90%;
-            height: 50%;
-            font-size: 3rem;
-            font-family: Virgil;
-            cursor: pointer;
-            padding-left: 1rem;
-            color: var(--fg);
-            /* border-radius: 1rem; */
-        }
-    </style>
-</head>
+    }
+</script>
 
 <body>
 <header>
@@ -102,63 +38,132 @@
     <div id="theme-selector"></div>
     <div style="display:flex;flex-grow:100"></div>
 
-    <button class="bg-stripes" id="cancel">CANCEL</button>
-    <div style="display:flex;flex-grow:25"></div>
-    <button class="bg-stripes" id="confirm">CONFIRM</button>
+    <input class="bg-stripes" form="values" id="confirm" type="submit" value="CONFIRM">
 
     <div style="display:flex;flex-grow:100"></div>
-    <div id="account"><a id="signin" th:href="@{/login}">Sign In</a></div>
+    <div id="account"><a id="signin" th:href="@{/signin}">Sign In</a></div>
 </header>
 <div style="width:100%;height:2px;background:var(--fg);"></div>
 <main>
     <div id="keys">
-        <div>Mode</div>
-        <div>Difficulty</div>
-        <div>Time</div>
-        <div>Length</div>
+        <label for="mode">Mode</label>
+        <label for="difficulty">Difficulty</label>
+        <label for="time">Time</label>
+        <label for="length">Length</label>
     </div>
     <div style="background: var(--fg);width:2px;height:100%;"></div>
-    <div id="values">
-        <select id="mode-select">
+    <form id="values">
+        <select id="mode" name="mode">
             <optgroup label="Decimal">
-                <option selected value="">Integer (Decimal)</option>
-                <option value="">Rational (Decimal)</option>
+                <option selected value="DECIMAL-INTEGER">Integer (Decimal)</option>
+                <option disabled value="DECIMAL-RATIONAL">Rational (Decimal)</option>
             </optgroup>
             <option disabled value=""></option>
             <optgroup label="Dozenal">
-                <option value="">Integer (Dozenal)</option>
-                <option value="">Rational (Dozenal)</option>
+                <option disabled value="DOZENAL-INTEGER">Integer (Dozenal)</option>
+                <option disabled value="DOZENAL-RATIONAL">Rational (Dozenal)</option>
             </optgroup>
             <option disabled value=""></option>
             <optgroup label="Binary">
-                <option value="">Count (Binary)</option>
-                <option value="">Logic (Binary)</option>
+                <option disabled value="BINARY-COUNT">Count (Binary)</option>
+                <option disabled value="BINARY-LOGIC">Logic (Binary)</option>
             </optgroup>
             <option disabled value=""></option>
             <optgroup label="Hexadecimal">
-                <option value="">Count (Hex)</option>
-                <option value="">Logic (Hex)</option>
+                <option disabled value="HEX-COUNT">Count (Hex)</option>
+                <option disabled value="HEX-LOGIC">Logic (Hex)</option>
             </optgroup>
         </select>
-        <select id="difficulty-select">
-            <option selected value="">Easy</option>
-            <option value="">Medium</option>
-            <option value="">Hard</option>
+        <select id="difficulty" name="difficulty">
+            <option selected value="EASY">Easy</option>
+            <option value="MEDIUM">Medium</option>
+            <option disabled value="HARD">Hard</option>
         </select>
-        <select id="time-select">
-            <option value="">10 Seconds</option>
-            <option value="">30 Seconds</option>
-            <option selected value="">1 Minute</option>
-            <option value="">5 Minutes</option>
+        <select id="time" name="time">
+            <option value="10S">10 Seconds</option>
+            <option value="30S">30 Seconds</option>
+            <option selected value="1M">1 Minute</option>
+            <option value="5M">5 Minutes</option>
         </select>
-        <select id="length-select">
-            <option value="">Tiny</option>
-            <option selected value="">Short</option>
-            <option value="">Medium</option>
-            <option value="">Long</option>
+        <select id="length" name="length">
+            <option value="TINY">Tiny</option>
+            <option selected value="SHORT">Short</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="LONG">Long</option>
         </select>
-    </div>
+    </form>
 </main>
 </body>
+
+<style>
+    body {
+        display: grid;
+        justify-items: center;
+        align-items: start;
+        grid-template-rows: 5rem 1rem 1fr;
+    }
+
+    a {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        border-radius: 2rem;
+    }
+
+    #confirm {
+        --bg-gap: 0.1rem;
+        --bg-thickness: 0.1rem;
+        --color: var(--ctp-green);
+        --color-rgb: var(--ctp-green-rgb);
+
+        padding: 0.5rem 1rem;
+        font-size: 2rem;
+        font-family: Virgil, monospace;
+        box-shadow: 0 0 0 .1rem var(--color);
+        color: var(--color);
+        border-radius: 1rem;
+        background-color: transparent;
+        border-width: 0;
+        cursor: pointer;
+    }
+
+
+    main {
+        display: grid;
+        place-items: center;
+        position: relative;
+
+        padding: 3rem;
+        max-width: 60rem;
+        width: 100%;
+        height: 100%;
+
+        grid-template-columns: 1fr 1rem 2fr
+    }
+
+    #keys,
+    #values {
+        display: grid;
+        place-items: center;
+        align-content: space-evenly;
+        grid-template-rows: repeat(4, 1fr);
+
+        width: 100%;
+        height: 100%;
+        font-size: 3rem;
+    }
+
+    #values select {
+        width: 90%;
+        height: 50%;
+        font-size: 3rem;
+        font-family: Virgil, monospace;
+        cursor: pointer;
+        padding-left: 1rem;
+        color: var(--fg);
+        /* border-radius: 1rem; */
+    }
+</style>
 
 </html>

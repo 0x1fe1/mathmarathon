@@ -1,8 +1,27 @@
 spring:
+  application:
+    name: mathmarathon
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    prefix: file:src/main/resources/templates/
+  devtools:
+    livereload:
+      enabled: true
+      port: 6970
   security:
     oauth2:
       client:
         registration:
           github:
-            clientId: Ov23liXTIyyu5HERA0HA
-            clientSecret: f34238f54a77d3c41e6f4887914604816289ad80
+            client-id: Ov23liXTIyyu5HERA0HA
+            client-secret: f34238f54a77d3c41e6f4887914604816289ad80
+          google:
+            client-id: 658811187352-av5377ahf62ur75uhg3gch2irnhindbj.apps.googleusercontent.com
+            client-secret: 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
+server:
+  tomcat:
+    remoteip:
+      port-header: 6942
+  port: 6969

@@ -21,6 +21,8 @@
     --ctp-green-rgb: 166, 227, 161;
     --ctp-blue: #89b4fa;
     --ctp-blue-rgb: 137, 180, 250;
+    --ctp-teal: #94e2d5;
+    --ctp-teal-rgb: 148, 226, 213;
 
     /* red-500 */
     --rank-1: #ef4444;
@@ -48,6 +50,8 @@
         --ctp-green-rgb: 64, 160, 43;
         --ctp-blue: #1e66f5;
         --ctp-blue-rgb: 30, 102, 245;
+        --ctp-teal: #179299;
+        --ctp-teal-rgb: 23, 146, 153;
     }
 }
 
@@ -69,6 +73,8 @@
     --ctp-green-rgb: 64, 160, 43;
     --ctp-blue: #1e66f5;
     --ctp-blue-rgb: 30, 102, 245;
+    --ctp-teal: #179299;
+    --ctp-teal-rgb: 23, 146, 153;
 }
 
 html {
@@ -89,7 +95,7 @@ html,
 body {
     background: var(--bg);
     color: var(--fg);
-    font-family: Virgil;
+    font-family: Virgil, monospace;
 }
 
 h1 {
@@ -110,6 +116,7 @@ button {
 
 button:hover,
 button:focus,
+input[type="submit"]:hover,
 a:focus {
     filter: contrast(150%) brightness(125%);
     background-color: rgb(var(--accent-rgb), 0.25);
@@ -117,12 +124,14 @@ a:focus {
 }
 
 button:focus,
+input[type="submit"]:focus,
 a:focus {
     outline: 2px solid var(--fg);
     outline-offset: 4px;
 }
 
-button:active {
+button:active,
+input[type="submit"]:active {
     transform: scale(0.95);
 }
 
