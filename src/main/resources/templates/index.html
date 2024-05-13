@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="https://www.thymeleaf.org">
 
 <head th:replace="~{fragments/head ::head}"><title></title></head>
 
@@ -7,12 +8,15 @@
 <header>
     <div id="theme-selector"></div>
     <div style="display:flex;flex-grow:100"></div>
-    <div id="account"><a id="signin" th:href="@{/signin}">Sign In</a></div>
+
+    <div id="account">
+        <a sec:authorize="isAnonymous()" th:href="@{/login}">Log In</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/logout}">Log Out</a>
+    </div>
 </header>
 
 <main>
-    <h1>Pango.page <p style="text-shadow:rgb(var(--fg-rgb),0.5) .1rem .1rem;">a tiny
-        website</p></h1>
+    <h1>Pango.page <span>a tiny website </span></h1>
 
     <div id="apps">
         <a class="app mathmarathon bg-stripes unselectable" th:href="@{/mathmarathon}">Mathmarathon</a>
@@ -97,6 +101,9 @@
         place-items: center;
         gap: 2rem;
     }
-</style>
 
-<!-- TODO: localization https://phrase.com/blog/posts/step-step-guide-javascript-localization/ -->
+    h1 > * {
+        text-shadow: rgb(var(--fg-rgb), 0.5) .1rem .1rem;
+        font-size: 2rem;
+    }
+</style>

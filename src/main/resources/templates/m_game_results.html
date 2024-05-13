@@ -19,7 +19,8 @@
 
         const expression = JSON.parse(localStorage.getItem("EXPRESSION") ?? "[]");
         const true_answer = eval_expr(expression);
-        const user_answer = JSON.parse(localStorage.getItem("USER-ANSWER") ?? "0").answer;
+        const user_answer_raw = JSON.parse(localStorage.getItem("USER-ANSWER") ?? "null");
+        const user_answer = user_answer_raw.answer ?? null;
         const score = calculate_score(settings, true_answer, user_answer);
 
         expr_div.innerHTML = expression.join(" ").replaceAll("*", "×");
@@ -49,6 +50,8 @@
     }
 
     function calculate_score(settings, true_answer, answer) {
+        if (answer == null || answer == "") return 0;
+
         const difficulty_mult = TABLE.difficulty[settings.difficulty];
         const length_mult = TABLE.length[settings.length];
         const time_mult = TABLE.time[settings.time];

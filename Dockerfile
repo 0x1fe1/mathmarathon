@@ -1,10 +1,10 @@
 FROM eclipse-temurin:21-alpine AS build
 
-COPY src/main ./src/main
-COPY --chmod=765 gradlew build.gradle settings.gradle ./
 COPY gradle ./gradle
+COPY --chmod=765 gradlew build.gradle settings.gradle ./
+COPY src/main ./src/main
 
-RUN ./gradlew --no-daemon --parallel -Porg.gradle.caching=false --no-build-cache --no-configuration-cache clean bootJar
+RUN --mount=type=cache,target=/root/.gradle ./gradlew --build-cache --parallel --no-daemon clean bootJar
 
 FROM eclipse-temurin:21-jre-alpine AS run
 

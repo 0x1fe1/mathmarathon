@@ -1,24 +1,25 @@
+server:
+  port: 6969
 spring:
   application:
     name: mathmarathon
   thymeleaf:
     cache: false
-    mode: HTML
-    encoding: UTF-8
-    prefix: file:src/main/resources/templates/
-  devtools:
-    livereload:
-      enabled: true
-      port: 6970
+  profiles:
+    active: default
   datasource:
     url: "jdbc:postgresql://db:5432/mydb"
     username: myuser
     password: mypassword
     driver-class-name: org.postgresql.Driver
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
 #  security:
 #    oauth2:
 #      client:
@@ -29,8 +30,4 @@ spring:
 #          google:
 #            client-id: 658811187352-av5377ahf62ur75uhg3gch2irnhindbj.apps.googleusercontent.com
 #            client-secret: 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
-server:
-  tomcat:
-    remoteip:
-      port-header: 6942
-  port: 6969
+
