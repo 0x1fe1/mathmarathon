@@ -1,0 +1,5 @@
+<div sec:authorize="isAnonymous()">
+    <a th:href="@{/login}">Log In</a>
+    <a th:href="@{/register}">Register</a>
+</div>
+<a sec:authorize="isAuthenticated()" th:href="@{/logout}">Log Out</a>

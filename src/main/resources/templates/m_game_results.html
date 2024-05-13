@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head ::head}"><title></title></head>
+<head th:insert="~{fragments/head}"><title></title></head>
 
 <script defer>
     window.onload = function () {
@@ -82,6 +82,7 @@
     <div style="display:flex;flex-grow:100"></div>
 
     <button class="bg-stripes" id="submit"></button>
+    <div id="account" th:insert="~{fragments/auth}"></div>
     <div style="display:flex;flex-grow:10"></div>
 </header>
 <div style="width:100%;height:2px;background:var(--fg);"></div>

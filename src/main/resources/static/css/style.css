@@ -188,8 +188,8 @@ a:active {
 
 
 #account {
-    width: 8rem;
-    height: 2rem;
+    width: fit-content;
+    height: 3rem;
 
     color: var(--fg);
     box-shadow: 0 0 0 0.1rem var(--fg);
@@ -198,6 +198,12 @@ a:active {
     display: grid;
     place-items: center;
     font-size: 1.5rem;
+    padding: 0 1rem;
+}
+
+#account > div {
+    display: flex;
+    gap: 2rem;
 }
 
 #account > a {

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head ::head}"><title></title></head>
+<head th:insert="~{fragments/head}"><title></title></head>
 
 <body>
 <header>
@@ -10,10 +10,7 @@
     <div style="display:flex;flex-grow:2"></div>
     <div id="theme-selector"></div>
     <div style="display:flex;flex-grow:100"></div>
-    <div id="account">
-        <a class="not-me" sec:authorize="isAnonymous()" th:href="@{/login}">Log In</a>
-        <a class="not-me" sec:authorize="isAuthenticated()" th:href="@{/logout}">Log Out</a>
-    </div>
+    <div id="account" th:insert="~{fragments/auth}"></div>
 </header>
 
 <div></div>

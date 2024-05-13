@@ -1,12 +1,14 @@
 package page.pango.mathmarathon.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import page.pango.mathmarathon.model.User;
+import page.pango.mathmarathon.entity.User;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
+import java.util.Optional;
 
-    User findByEmail(String email);
+public interface UserRepository extends JpaRepository<User, Integer> {
+    Optional<User> findUserByName(String username);
+
+    User getUserByName(String username);
+
+    boolean existsByName(String username);
 }

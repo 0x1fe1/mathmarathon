@@ -1,27 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
 <head th:insert="~{fragments/head}"><title></title></head>
 <body>
 
 <main style="position: relative">
     <div id="theme-selector" style="position: absolute; right:.5rem; bottom: .5rem"></div>
-    <form method="POST" name="f" th:action="@{/login}" th:object="${user}">
-        <div class="alert alert-error" th:if="${param.error}">Wrong Name or Password</div>
+    <form method="POST" th:action="@{/register}" th:object="${user}">
+        <div class="alert alert-error" th:if="${param.exists}">
+            User with that name already exists.
+        </div>
+        <div class="alert alert-error" th:if="${param.error}">
+            Passwords do not match.
+        </div>
         <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-            <h2>Sign In</h2>
+            <h2>Register</h2>
         </div>
         <div class="form-group">
             <label for="username">Username:</label>
-            <input id="username" name="username" type="text"/>
+            <input id="username" name="username" required th:field="*{name}" type="text">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input id="email" name="email" required th:field="*{email}" type="text">
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input id="password" name="password" type="password"/>
+            <input id="password" name="password" required th:field="*{password}" type="password">
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Repeat password:</label>
+            <input id="confirm_password" name="confirmPassword" required th:field="*{confirmPassword}" type="password">
         </div>
         <div style="display: flex; justify-content: center; margin-top: 40px;">
-            <button id="submit" type="submit">Log In</button>
+            <button id="submit" type="submit">Register</button>
         </div>
-        <p>No Account?<br> <a href="/register">Register</a></p>
+        <p>Already Have an Account? <br> <a href="/login">Sign In</a></p>
     </form>
 </main>
 
@@ -117,5 +131,4 @@
         font-weight: bold;
     }
 </style>
-
 </html>
