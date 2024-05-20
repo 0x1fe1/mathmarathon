@@ -37,8 +37,10 @@
             for (const [key, value] of data_raw) {
                 data[key] = value;
             }
-            localStorage.setItem("USER-ANSWER", JSON.stringify(data));
-            // console.log(JSON.parse(localStorage.getItem("USER-ANSWER")));
+            if (data.answer == "") {
+                data.answer = "0";
+            }
+            localStorage.setItem("USER-ANSWER", data.answer.toString());
             window.location.href = "/mathmarathon/game/results";
         })
     };
@@ -207,7 +209,7 @@
         </div>
         <span aria-hidden="true" class="opd" data-changing="true" hidden="hidden"></span>
     </div>
-    <form id="answer">
+    <form id="answer" name="Answer">
         <label for="answer-text">Answer:</label>
         <input class="bg-stripes" id="answer-text" name="answer" placeholder="42.069" type="number" value="">
         <input class="bg-stripes" id="answer-submit" type="submit" value="Submit">

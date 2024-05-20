@@ -17,10 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import page.pango.mathmarathon.entity.User;
-import page.pango.mathmarathon.entity.UserRole;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import page.pango.mathmarathon.repositories.UserRepository;
-import page.pango.mathmarathon.repositories.UserRoleRepository;
 import page.pango.mathmarathon.service.AppUserDetailsService;
 
 @Configuration
@@ -28,8 +28,6 @@ import page.pango.mathmarathon.service.AppUserDetailsService;
 public class SecurityConfig {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private UserRoleRepository userRoleRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -42,7 +40,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(registry -> registry
                 .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/fonts/**").permitAll()
                 .requestMatchers("/", "/mathmarathon", "/mathmarathon/settings", "/mathmarathon/game",
-                    "/mathmarathon/game/results", "/mathmarathon/rankings").permitAll()
+                    "/mathmarathon/game/results").permitAll()
                 .requestMatchers("/login", "/register").permitAll()
                 .anyRequest().authenticated()
             ).formLogin(form -> form
@@ -73,19 +71,15 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         var successHandler = new SimpleUrlAuthenticationSuccessHandler() {
+            private final RequestCache requestCache = new HttpSessionRequestCache();
+
             @Override
             protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-                var username = authentication.getName();
-                User user = userRepository.getUserByName(username);
-                UserRole userRole = userRoleRepository.getUserRoleById(user.getId());
-
-                if (userRole == null || userRole.role == null) {
-                    return "/";
+                SavedRequest savedRequest = requestCache.getRequest(request, response);
+                if (savedRequest == null) {
+                    return super.determineTargetUrl(request, response);
                 }
-
-                return switch (userRole.role) {
-                    case USER -> "/";
-                };
+                return savedRequest.getRedirectUrl();
             }
         };
         successHandler.setUseReferer(true);

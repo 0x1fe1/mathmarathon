@@ -5,11 +5,6 @@
 
 <script defer>
     window.onload = function () {
-        document.querySelector("#submit").addEventListener("click", (e) => {
-            e.preventDefault();
-            window.location.href = "/mathmarathon/game/results/submit";
-        })
-
         const settings = JSON.parse(localStorage.getItem("SETTINGS"));
 
         const expr_div = document.querySelector("#expr-container");
@@ -19,13 +14,14 @@
 
         const expression = JSON.parse(localStorage.getItem("EXPRESSION") ?? "[]");
         const true_answer = eval_expr(expression);
-        const user_answer_raw = JSON.parse(localStorage.getItem("USER-ANSWER") ?? "null");
-        const user_answer = user_answer_raw.answer ?? null;
+        const user_answer = parseInt(localStorage.getItem("USER-ANSWER"), 10) ?? 0;
         const score = calculate_score(settings, true_answer, user_answer);
+
+        localStorage.setItem("SCORE", score.toString());
 
         expr_div.innerHTML = expression.join(" ").replaceAll("*", "×");
         true_answer_div.innerHTML = true_answer.toString();
-        user_answer_div.innerHTML = user_answer;
+        user_answer_div.innerHTML = user_answer.toString();
         score_div.innerHTML = `${score} / 100`;
     };
 
@@ -81,8 +77,7 @@
     <div id="theme-selector"></div>
     <div style="display:flex;flex-grow:100"></div>
 
-    <button class="bg-stripes" id="submit"></button>
-    <div id="account" th:insert="~{fragments/auth}"></div>
+    <a class="bg-stripes" id="rankings" href="/mathmarathon/rankings"></a>
     <div style="display:flex;flex-grow:10"></div>
 </header>
 <div style="width:100%;height:2px;background:var(--fg);"></div>
@@ -116,7 +111,7 @@
         grid-template-rows: 5rem 1rem 1fr;
     }
 
-    a:not(#home) {
+    a:not(#home, #rankings) {
         width: 100%;
         height: 100%;
         display: grid;
@@ -176,9 +171,9 @@
     }
 
 
-    #submit {
-        --color: var(--ctp-green);
-        --color-rgb: var(--ctp-green-rgb);
+    #rankings {
+        --color: var(--ctp-blue);
+        --color-rgb: var(--ctp-blue-rgb);
         --bg-gap: 0.1rem;
         --bg-thickness: 0.1rem;
 
@@ -190,10 +185,11 @@
         background-color: transparent;
         border-width: 0;
         width: 10rem;
+        text-align: center;
     }
 
-    #submit::before {
-        content: "Submit";
+    #rankings::before {
+        content: "Rankings";
     }
 </style>
 
