@@ -1,6 +1,7 @@
 package page.pango.mathmarathon.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import page.pango.mathmarathon.entity.UserRankDTO;
 import page.pango.mathmarathon.service.UserService;
@@ -30,5 +31,15 @@ public class ApiController {
     @GetMapping("/addFakeUsers")
     public void addFakeUsers() {
         userService.addFakeUsers(10);
+    }
+
+    @PostMapping("/updateUserRanking")
+    public ResponseEntity<String> updateUserRanking(@RequestBody UserRankDTO userRankDTO) {
+        boolean success = userService.updateUserRank(userRankDTO.getName(), userRankDTO.getRank());
+        if (success) {
+            return ResponseEntity.ok("User ranking updated successfully");
+        } else {
+            return ResponseEntity.status(400).body("Failed to update user ranking");
+        }
     }
 }

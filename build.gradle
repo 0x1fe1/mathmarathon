@@ -55,4 +55,3 @@ tasks.register('runApp', Exec) {
     commandLine 'docker', 'compose', 'up', '--build'
 }
 
-//bootRun.dependsOn runDb

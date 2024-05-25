@@ -6,6 +6,10 @@
 
 <script defer>
     window.onload = function () {
+        fetch_rankings();
+    }
+
+    function fetch_rankings() {
         fetch('/api/rankings')
             .then(response => {
                 if (!response.ok) {
@@ -15,19 +19,65 @@
             })
             .then(data => {
                 console.log("fetched:", data)
-                const rankings = JSON.parse(JSON.stringify(data));
-                rankings.sort((a, b)=> b.rank - a.rank);
-                document.querySelector("#users").innerHTML = "";
-                document.querySelector("#ranks").innerHTML = "";
-                for (let i = 0; i < rankings.length; i++) {
-                    document.querySelector("#users").innerHTML += `<div class="username" data-id="user-${i}">${rankings[i].name}</div>`
-                    document.querySelector("#ranks").innerHTML += `<div class="rank" data-id="user-${i}"><div class="filler bg-stripes">${rankings[i].rank}</div></div>`
-                    document.querySelector(`.rank[data-id="user-${i}"] > .filler`).style.width = `${Math.floor(rankings[i].rank / rankings[0].rank * 100)}%`;
-                }
+                localStorage.setItem("RANKINGS", JSON.stringify(data));
+
+                display_rankings()
             })
             .catch(error => {
                 console.error('There has been a problem with your fetch operation:', error);
             });
+    }
+
+    function display_rankings() {
+        let rankings = JSON.parse(localStorage.getItem("RANKINGS"));
+        rankings = rankings.toSorted((a, b) => b.rank - a.rank);
+        rankings = rankings.filter(r => r.rank > 0);
+        document.querySelector("#users").innerHTML = "";
+        document.querySelector("#ranks").innerHTML = "";
+        for (let i = 0; i < rankings.length; i++) {
+            document.querySelector("#users").innerHTML += `<div class="username" data-id="user-${i}" data-name="${rankings[i].name}">${rankings[i].name}</div>\n`
+            document.querySelector("#ranks").innerHTML += `<div class="rank" data-id="user-${i}"><div class="filler bg-stripes">${rankings[i].rank}</div></div>\n`
+            document.querySelector(`.rank[data-id="user-${i}"] > .filler`).style.width = `${Math.floor(rankings[i].rank / rankings[0].rank * 100)}%`;
+        }
+    }
+
+    function submit_score() {
+        const score = localStorage.getItem('SCORE');
+        let username = localStorage.getItem('USERNAME');
+        // document.cookie.split(';').forEach(cookie => {
+        //     const [key, _value] = cookie.trim().split('=');
+        //     if (key === 'username') {
+        //         username = key;
+        //     }
+        // });
+
+        if (score === null || username === null) {
+            console.error('SCORE or username not found in localStorage');
+            return;
+        }
+
+        const rankings = JSON.parse(localStorage.getItem("RANKINGS"));
+        rankings.find(r => r.name === username).rank += parseInt(score, 10);
+        localStorage.setItem("RANKINGS", JSON.stringify(rankings));
+        display_rankings();
+
+        // fetch('/api/updateUserRanking', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({ username: username, score: parseInt(score, 10) })
+        // })
+        //     .then(response => {
+        //         if (response.ok) {
+        //             console.log('User ranking updated successfully');
+        //         } else {
+        //             console.error('Failed to update user ranking');
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Error:', error);
+        //     });
     }
 </script>
 
@@ -37,7 +87,7 @@
     <div style="display:flex;flex-grow:10"></div>
     <div id="theme-selector"></div>
     <div style="display:flex;flex-grow:100"></div>
-    <button class="bg-stripes" id="submit" aria-description="Submit Last Score"></button>
+    <button class="bg-stripes" id="submit" aria-description="Submit Last Score" onclick="submit_score()"></button>
 </header>
 <div style="width:100%;height:2px;background:var(--fg);"></div>
 <main>
