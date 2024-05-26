@@ -2,6 +2,8 @@ package page.pango.mathmarathon.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import page.pango.mathmarathon.entity.UserRankDTO;
 import page.pango.mathmarathon.service.UserService;
@@ -35,7 +37,10 @@ public class ApiController {
 
     @PostMapping("/updateUserRanking")
     public ResponseEntity<String> updateUserRanking(@RequestBody UserRankDTO userRankDTO) {
-        boolean success = userService.updateUserRank(userRankDTO.getName(), userRankDTO.getRank());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        boolean success = userService.updateUserRank(username, userRankDTO.getRank());
         if (success) {
             return ResponseEntity.ok("User ranking updated successfully");
         } else {

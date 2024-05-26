@@ -7,6 +7,20 @@
 <script defer>
     window.onload = function () {
         fetch_rankings();
+        update_submit();
+    }
+
+    function update_submit() {
+        const submit = document.getElementById("submit");
+        const value = parseInt(localStorage.getItem('SCORE') ?? "0", 10) > 0;
+        submit.dataset.active = value.toString();
+        if (value) {
+            submit.removeAttribute("disabled");
+            submit.removeAttribute("aria-disabled");
+        } else {
+            submit.setAttribute("disabled", "");
+            submit.setAttribute("aria-disabled", "");
+        }
     }
 
     function fetch_rankings() {
@@ -43,41 +57,43 @@
 
     function submit_score() {
         const score = localStorage.getItem('SCORE');
-        let username = localStorage.getItem('USERNAME');
-        // document.cookie.split(';').forEach(cookie => {
-        //     const [key, _value] = cookie.trim().split('=');
-        //     if (key === 'username') {
-        //         username = key;
-        //     }
-        // });
 
-        if (score === null || username === null) {
-            console.error('SCORE or username not found in localStorage');
+        if (score == null) {
+            console.error('SCORE not found in localStorage');
+            return;
+        }
+        if (score === "0") {
             return;
         }
 
         const rankings = JSON.parse(localStorage.getItem("RANKINGS"));
+        const username = localStorage.getItem('USERNAME');
         rankings.find(r => r.name === username).rank += parseInt(score, 10);
         localStorage.setItem("RANKINGS", JSON.stringify(rankings));
         display_rankings();
 
-        // fetch('/api/updateUserRanking', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({ username: username, score: parseInt(score, 10) })
-        // })
-        //     .then(response => {
-        //         if (response.ok) {
-        //             console.log('User ranking updated successfully');
-        //         } else {
-        //             console.error('Failed to update user ranking');
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error('Error:', error);
-        //     });
+        fetch('/api/updateUserRanking', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({rank: parseInt(score, 10)})
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('User ranking updated successfully');
+                    console.log('Fetching new rankings...');
+                    fetch_rankings();
+                } else {
+                    console.error('Failed to update user ranking');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        localStorage.setItem('SCORE', "0");
+        update_submit();
     }
 </script>
 
@@ -87,7 +103,8 @@
     <div style="display:flex;flex-grow:10"></div>
     <div id="theme-selector"></div>
     <div style="display:flex;flex-grow:100"></div>
-    <button class="bg-stripes" id="submit" aria-description="Submit Last Score" onclick="submit_score()"></button>
+    <button class="bg-stripes" id="submit" data-active="false" aria-description="Submit Last Score"
+            onclick="submit_score()"></button>
 </header>
 <div style="width:100%;height:2px;background:var(--fg);"></div>
 <main>
@@ -192,6 +209,11 @@
         border-width: 0;
         width: 20rem;
         text-align: center;
+    }
+
+    #submit[data-active="false"] {
+        --color: var(--blank);
+        --color-rgb: var(--blank-rgb);
     }
 
     #submit::before {

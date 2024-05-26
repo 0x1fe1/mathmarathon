@@ -1,6 +1,7 @@
 package page.pango.mathmarathon.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,8 @@ public class UserController {
         }
         if (userService.addUser(newUser)) {
             request.login(newUser.getName(), newUser.getPassword());
-            response.addHeader("Content-Script-Type", "localStorage.setItem('USERNAME', '" + newUser.getName() + "');");
+            response.addCookie(new Cookie("USERNAME", newUser.getName()));
+
             SavedRequest savedRequest = requestCache.getRequest(request, response);
             if (savedRequest != null) {
                 return "redirect:" + savedRequest.getRedirectUrl();

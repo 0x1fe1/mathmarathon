@@ -1,11 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:insert="~{fragments/head}"><title></title></head>
+
+<script>
+    window.onload = function () {
+        const loginForm = document.querySelector('form#loginForm');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', handleFormSubmit);
+        }
+    };
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const action = form.getAttribute('action');
+        const method = form.getAttribute('method').toUpperCase();
+
+        fetch(action, {
+            method: method,
+            body: formData,
+            credentials: 'same-origin'
+        })
+            .then(response => {
+                if (response.ok) {
+                    const username = document.cookie.split(";").filter(c => c.includes("USERNAME"))[0].replace("USERNAME=", '') ?? "";
+                    localStorage.setItem('USERNAME', username);
+                    window.location.href = response.url;
+                } else {
+                    console.error('Login failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
 <body>
 
 <main style="position: relative">
     <div id="theme-selector" style="position: absolute; right:.5rem; bottom: .5rem"></div>
-    <form method="POST" name="f" th:action="@{/login}" th:object="${user}">
+    <form id="loginForm" method="POST" name="f" th:action="@{/login}" th:object="${user}">
         <div class="alert alert-error" th:if="${param.error}">Wrong Name or Password</div>
         <div style="display: flex; justify-content: center; margin-bottom: 20px;">
             <h2>Sign In</h2>
