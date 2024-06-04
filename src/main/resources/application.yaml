@@ -16,9 +16,9 @@ spring:
     hibernate:
       ddl-auto: update
   session:
-    store-type: jdbc
     jdbc:
       initialize-schema: always
+
 #    database-platform: org.hibernate.dialect.PostgreSQLDialect
 #  security:
 #    oauth2:

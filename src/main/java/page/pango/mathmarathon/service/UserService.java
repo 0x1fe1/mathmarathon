@@ -23,14 +23,6 @@ public class UserService {
     @Autowired
     private PasswordEncoder encoder;
 
-    public User getUserByName(String userName) {
-        return userRepository.getUserByName(userName);
-    }
-
-    public Optional<User> findUserByName(String username) {
-        return userRepository.findUserByName(username);
-    }
-
     public boolean addUser(UserDTO newUser) {
         if (!userRepository.existsByName(newUser.getName())) {
             User user = new User(
@@ -95,5 +87,13 @@ public class UserService {
             .filter(user -> user.getEmail().endsWith("@example.com"))
             .collect(Collectors.toList());
         userRepository.deleteAll(fakeUsers);
+    }
+
+    public User getUserByName(String userName) {
+        return userRepository.getUserByName(userName);
+    }
+
+    public Optional<User> findUserByName(String username) {
+        return userRepository.findUserByName(username);
     }
 }

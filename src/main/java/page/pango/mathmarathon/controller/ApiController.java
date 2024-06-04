@@ -25,16 +25,6 @@ public class ApiController {
         return userService.getRankings();
     }
 
-    @GetMapping("/deleteFakeUsers")
-    public void deleteAllUsers() {
-        userService.deleteFakeUsers();
-    }
-
-    @GetMapping("/addFakeUsers")
-    public void addFakeUsers() {
-        userService.addFakeUsers(10);
-    }
-
     @PostMapping("/updateUserRanking")
     public ResponseEntity<String> updateUserRanking(@RequestBody UserRankDTO userRankDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -48,3 +38,14 @@ public class ApiController {
         }
     }
 }
+
+
+//    @GetMapping("/deleteFakeUsers")
+//    public void deleteAllUsers() {
+//        userService.deleteFakeUsers();
+//    }
+//
+//    @GetMapping("/addFakeUsers")
+//    public void addFakeUsers() {
+//        userService.addFakeUsers(10);
+//    }

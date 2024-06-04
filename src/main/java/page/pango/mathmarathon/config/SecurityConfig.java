@@ -43,7 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(registry -> registry
-                .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/fonts/**").permitAll()
+                .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/fonts/**").permitAll()
                 .requestMatchers("/", "/mathmarathon", "/mathmarathon/settings", "/mathmarathon/game",
                     "/mathmarathon/game/results").permitAll()
                 .requestMatchers("/login", "/register").permitAll()
@@ -61,25 +61,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        var provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService());
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public AuthenticationSuccessHandler successHandler() {
         return new SimpleUrlAuthenticationSuccessHandler() {
             private final RequestCache requestCache = new HttpSessionRequestCache();
 
             @Override
-            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+            public void onAuthenticationSuccess(
+                HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+                throws IOException, ServletException {
                 String username = SecurityContextHolder.getContext().getAuthentication().getName();
                 response.addCookie(new Cookie("USERNAME", username));
 
@@ -98,28 +87,16 @@ public class SecurityConfig {
         };
     }
 
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        var provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 
-//    @Bean
-//    public AuthenticationSuccessHandler successHandler() {
-//        return new SimpleUrlAuthenticationSuccessHandler() {
-//            private final RequestCache requestCache = new HttpSessionRequestCache();
-//
-//            @Override
-//            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//                String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//
-//                SavedRequest savedRequest = requestCache.getRequest(request, response);
-//                if (savedRequest == null) {
-//                    super.onAuthenticationSuccess(request, response, authentication);
-//                    return;
-//                }
-//                String targetUrl = savedRequest.getRedirectUrl();
-//                if (targetUrl != null) {
-//                    getRedirectStrategy().sendRedirect(request, response, targetUrl);
-//                } else {
-//                    super.onAuthenticationSuccess(request, response, authentication);
-//                }
-//            }
-//        };
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
