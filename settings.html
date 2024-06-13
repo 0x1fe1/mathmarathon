@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Pango.page</title>
+    <link href="static/images/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="static/css/reset.css" rel="stylesheet">
+    <link href="static/css/style.css" rel="stylesheet">
+    <script defer src="static/js/theme.js"></script>
+</head>
+
+<script defer>
+    window.addEventListener("load", (event) => {
+        pull_settings();
+        get_settings();
+    });
+
+    function pull_settings() {
+        const settings = localStorage.getItem("SETTINGS")
+        if (settings == null) return;
+
+        for (const [key, value] of Object.entries(JSON.parse(settings))) {
+            document.querySelector(`select#${key}`).value = value;
+        }
+    }
+
+    function get_settings() {
+        const form = document.querySelector("#values");
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const data_raw = new FormData(form);
+            const data = {};
+            for (const [key, value] of data_raw) {
+                data[key] = value;
+            }
+            localStorage.setItem("SETTINGS", JSON.stringify(data));
+            console.log(JSON.parse(localStorage.getItem("SETTINGS")));
+        })
+    }
+</script>
+
+<body>
+    <header>
+        <a href="mathmarathon.html" id="home">Mathmarathon</a>
+        <div style="display:flex;flex-grow:100"></div>
+        <input class="bg-stripes" form="values" id="confirm" type="submit" value="CONFIRM">
+        <div style="display:flex;flex-grow:10"></div>
+        <div id="theme-selector"></div>
+    </header>
+    <div style="width:100%;height:2px;background:var(--fg);"></div>
+    <main>
+        <div id="keys">
+            <label for="mode">Mode</label>
+            <label for="difficulty">Difficulty</label>
+            <label for="time">Time</label>
+            <label for="length">Length</label>
+        </div>
+        <div style="background: var(--fg);width:2px;height:100%;"></div>
+        <form id="values">
+            <select id="mode" name="mode">
+                <optgroup label="Decimal">
+                    <option selected value="DECIMAL-INTEGER">Integer (Decimal)</option>
+                    <option disabled value="DECIMAL-RATIONAL">Rational (Decimal)</option>
+                </optgroup>
+                <option disabled value=""></option>
+                <optgroup label="Dozenal">
+                    <option disabled value="DOZENAL-INTEGER">Integer (Dozenal)</option>
+                    <option disabled value="DOZENAL-RATIONAL">Rational (Dozenal)</option>
+                </optgroup>
+                <option disabled value=""></option>
+                <optgroup label="Binary">
+                    <option disabled value="BINARY-COUNT">Count (Binary)</option>
+                    <option disabled value="BINARY-LOGIC">Logic (Binary)</option>
+                </optgroup>
+                <option disabled value=""></option>
+                <optgroup label="Hexadecimal">
+                    <option disabled value="HEX-COUNT">Count (Hex)</option>
+                    <option disabled value="HEX-LOGIC">Logic (Hex)</option>
+                </optgroup>
+            </select>
+            <select id="difficulty" name="difficulty">
+                <option selected value="EASY">Easy</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HARD">Hard</option>
+            </select>
+            <select id="time" name="time">
+                <option selected value="10S">10 Seconds</option>
+                <option value="30S">30 Seconds</option>
+                <option value="1M">1 Minute</option>
+                <option value="5M">5 Minutes</option>
+            </select>
+            <select id="length" name="length">
+                <option selected value="TINY">Tiny</option>
+                <option value="SHORT">Short</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LONG">Long</option>
+            </select>
+        </form>
+    </main>
+</body>
+
+<style>
+    body {
+        display: grid;
+        justify-items: center;
+        align-items: start;
+        grid-template-rows: 5rem 1rem 1fr;
+    }
+
+    main {
+        display: grid;
+        place-items: center;
+        position: relative;
+
+        padding: 3rem;
+        max-width: 60rem;
+        width: 100%;
+        height: 100%;
+
+        grid-template-columns: 1fr 1rem 2fr
+    }
+
+    :not(#account) a:not(#home) {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        border-radius: 2rem;
+    }
+
+    #confirm {
+        --bg-gap: 0.1rem;
+        --bg-thickness: 0.1rem;
+        --color: var(--ctp-green);
+        --color-rgb: var(--ctp-green-rgb);
+
+        padding: 0.5rem 1rem;
+        font-size: 2rem;
+        font-family: Virgil, monospace;
+        box-shadow: 0 0 0 .1rem var(--color);
+        color: var(--color);
+        border-radius: 1rem;
+        background-color: transparent;
+        border-width: 0;
+        cursor: pointer;
+    }
+
+    #keys,
+    #values {
+        display: grid;
+        place-items: center;
+        align-content: space-evenly;
+        grid-template-rows: repeat(4, 1fr);
+
+        width: 100%;
+        height: 100%;
+        font-size: 3rem;
+    }
+
+    #values select {
+        width: 90%;
+        height: 50%;
+        font-size: 3rem;
+        font-family: Virgil, monospace;
+        cursor: pointer;
+        padding-left: 1rem;
+        color: var(--fg);
+        /* border-radius: 1rem; */
+    }
+</style>
+
+</html>

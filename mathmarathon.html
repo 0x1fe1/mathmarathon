@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Pango.page</title>
+    <link href="static/images/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="static/css/reset.css" rel="stylesheet">
+    <link href="static/css/style.css" rel="stylesheet">
+    <script defer src="static/js/theme.js"></script>
+</head>
+
+<body>
+    <header>
+        <a href="mathmarathon.html" id="home">Mathmarathon</a>
+        <div style="display:flex;flex-grow:10"></div>
+        <div id="theme-selector"></div>
+    </header>
+
+    <div></div>
+    <main>
+        <div class="bg-stripes app" id="settings"><a href="settings.html">⚙️ Settings</a></div>
+        <div class="bg-stripes app" id="game"><a href="game.html">🎮 Play</a></div>
+    </main>
+    <div></div>
+</body>
+
+<style>
+    body {
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        grid-template-rows: 5rem 1fr 2fr 1fr;
+    }
+
+    main {
+        display: grid;
+        place-items: center;
+
+        padding: 2rem;
+        max-width: 80rem;
+        height: 100%;
+        gap: 1rem;
+    }
+
+
+    #settings,
+    #game {
+        --bg-gap: 0.1rem;
+        --bg-thickness: 0.1rem;
+        --color: var(--accent);
+        --color-rgb: var(--accent-rgb);
+
+        width: 100%;
+        height: 100%;
+        box-shadow: inset 0 0 0 .1rem var(--fg), inset 0 0 0 .2rem var(--color);
+        font-size: 2.5rem;
+        border-radius: 2rem;
+        color: var(--color);
+        /* padding: 1rem; */
+    }
+
+    #game {
+        font-size: 3.5rem;
+    }
+
+    .app>a {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        border-radius: 2rem;
+        padding: 0 2rem;
+    }
+</style>
+
+</html>

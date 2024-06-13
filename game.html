@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Pango.page</title>
+    <link href="./static/images/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="./static/css/reset.css" rel="stylesheet">
+    <link href="./static/css/style.css" rel="stylesheet">
+    <script defer src="./static/js/theme.js"></script>
+</head>
+
+<script defer>
+    window.addEventListener("load", (_) => {
+        if (localStorage.getItem("SETTINGS") == null) {
+            localStorage.setItem("SETTINGS", JSON.stringify({
+                "mode": "DECIMAL-INTEGER",
+                "difficulty": "EASY",
+                "time": "30S",
+                "length": "SHORT"
+            }));
+        }
+
+        document.querySelector("#toggle-game").addEventListener("click", (e) => {
+            e.preventDefault();
+            const el = document.querySelector("#toggle-game");
+
+            if (el.dataset.started === "false") {
+                el.dataset.started = "true";
+                const expression = generate_expression();
+                localStorage.setItem("EXPRESSION", JSON.stringify(expression));
+                display_expression(expression);
+            } else {
+                el.dataset.started = "false";
+                stop_display();
+            }
+        })
+
+        const form = document.querySelector("#answer");
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const data_raw = new FormData(form);
+            const data = {};
+            for (const [key, value] of data_raw) {
+                data[key] = value;
+            }
+            if (data.answer == "") {
+                data.answer = "0";
+            }
+            localStorage.setItem("USER-ANSWER", data.answer.toString());
+            window.location.href = "game_results.html";
+        })
+    });
+
+    const TABLE = {
+        length: {
+            "TINY": 4,
+            "SHORT": 8,
+            "MEDIUM": 16,
+            "LONG": 32,
+        },
+        time: {
+            "10S": 10,
+            "30S": 30,
+            "1M": 60,
+            "5M": 300,
+        },
+        difficulty: {
+            "EASY": {
+                operands: {min: 1, max: 10},
+                operations: {"+": 2, "-": 1},
+            },
+            "MEDIUM": {
+                operands: {min: 1, max: 10},
+                operations: {"+": 3, "-": 2, "*": 1},
+            },
+            "HARD": {
+                operands: {min: 1, max: 100},
+                operations: {"+": 3, "-": 2, "*": 1},
+            }
+        },
+    }
+    let GAME_ON = false;
+    let GAME_TIMEOUTS = [];
+    let GAME_INTERVALS = [];
+
+    function stop_display() {
+        GAME_ON = false;
+        document.querySelector("#timer").dataset.timer = 0;
+        timer.innerHTML = "0:00";
+        GAME_TIMEOUTS.forEach(t => clearTimeout(t));
+        GAME_INTERVALS.forEach(t => clearInterval(t));
+        const windows = [
+            document.querySelector("#opd-first"),
+            document.querySelector("#opd-mid"),
+            document.querySelector("#opd-last"),
+        ]
+        windows.forEach(w => w.innerHTML = "");
+    }
+
+    function display_expression(expr) {
+        GAME_ON = true;
+        const settings = JSON.parse(localStorage.getItem("SETTINGS"));
+        const windows = [
+            document.querySelector("#opd-first"),
+            document.querySelector("#opd-mid"),
+            document.querySelector("#opd-last"),
+        ]
+        const N = expr.length;
+        const time = TABLE.time[settings.time];
+        const interval = time / (N + 3);
+        const timer = document.querySelector("#timer");
+        timer.dataset.timer = time;
+        timer.innerHTML = `${Math.floor(time / 60)}:${(time % 60).toString().padStart(2, "0")}`;
+        timer.dataset.timer = (time - 1).toString();
+
+        GAME_INTERVALS.push(setInterval(function () {
+            timer.innerHTML = `${Math.max(Math.floor(parseInt(timer.dataset.timer) / 60), 0)
+                }:${(Math.max(parseInt(timer.dataset.timer) % 60, 0)).toString().padStart(2, "0")
+                }`;
+            timer.dataset.timer = (parseInt(timer.dataset.timer) - 1).toString();
+        }, 1000));
+
+        const arity = 5;
+
+        function actual_display(iter, jter) {
+            windows[0].innerHTML = expr[iter + 0] ?? "";
+            windows[1].innerHTML = expr[iter + 1] ?? "";
+            windows[2].innerHTML = expr[iter + 2] ?? "";
+
+            if (jter % arity !== 0) {
+                windows[0].dataset.changing = "true";
+                windows[1].dataset.changing = "true";
+                windows[2].dataset.changing = "true";
+            } else {
+                windows[0].dataset.changing = "false";
+                windows[1].dataset.changing = "false";
+                windows[2].dataset.changing = "false";
+            }
+
+            if (iter <= expr.length && GAME_ON) {
+                GAME_TIMEOUTS.push(setTimeout(function () {
+                    actual_display(iter + (jter % arity === 0), (jter + 1) % arity);
+                }, interval * (1000 / arity)))
+            } else {
+                stop_display();
+            }
+        }
+
+        actual_display(-2, 1);
+    }
+
+    function generate_expression() {
+        const expression = [];
+        const settings = JSON.parse(localStorage.getItem("SETTINGS"));
+        const length = TABLE.length[settings.length];
+        const operations = TABLE.difficulty[settings.difficulty].operations;
+        const operands = TABLE.difficulty[settings.difficulty].operands;
+
+        if (settings.mode === "DECIMAL-INTEGER") {
+            for (let i = 0; i < length; i++) {
+                expression.push(rng_weight(i > 0 ? operations : {"+": 2, "-": 1}).toString());
+                expression[i] += rng_int(operands.max, operands.min).toString();
+            }
+        }
+
+        return expression;
+    }
+
+    function rng_int(max = 1, min = 0) {
+        return Math.floor(min + Math.random() * (max - min));
+    }
+
+    function rng_weight(weights) {
+        const weight_sum = Object.values(weights).reduce((a, b) => a + b);
+        const value = Math.random() * weight_sum;
+        let sum = 0;
+        for (const i in weights) {
+            sum += weights[i];
+            if (value <= sum) return i;
+        }
+        console.error("Weights Error:", arguments);
+    }
+</script>
+
+<body>
+    <header>
+        <a href="./mathmarathon.html" id="home">Mathmarathon</a>
+        <div style="display:flex;flex-grow:10"></div>
+        <div id="theme-selector"></div>
+
+        <div style="display:flex;flex-grow:100"></div>
+        <div data-timer="60" id="timer">0:00</div>
+        <div style="display:flex;flex-grow:100"></div>
+
+        <button class="bg-stripes" data-started="false" id="toggle-game"></button>
+        <div style="display:flex;flex-grow:10"></div>
+    </header>
+    <div style="width:100%;height:2px;background:var(--fg);"></div>
+    <main>
+        <div id="expression">
+            <div id="left">
+                <div class="opd" data-changing="false" id="opd-first"></div>
+            </div>
+            <div id="center">
+                <div class="opd" data-changing="false" id="opd-mid"></div>
+            </div>
+            <div id="right">
+                <div class="opd" data-changing="false" id="opd-last"></div>
+            </div>
+            <span aria-hidden="true" class="opd" data-changing="true" hidden="hidden"></span>
+        </div>
+        <form id="answer">
+            <label for="answer-text">Answer:</label>
+            <input class="bg-stripes" id="answer-text" name="answer" placeholder="42.069" type="number" value="">
+            <input class="bg-stripes" id="answer-submit" type="submit" value="Submit">
+        </form>
+    </main>
+</body>
+
+
+<style>
+    body {
+        display: grid;
+        justify-items: center;
+        align-items: start;
+        grid-template-rows: 5rem 1rem 1fr;
+    }
+
+    a:not(#home) {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        border-radius: 2rem;
+    }
+
+    #toggle-game {
+        --bg-gap: 0.1rem;
+        --bg-thickness: 0.1rem;
+
+        padding: 0.5rem;
+        font-size: 2rem;
+        box-shadow: 0 0 0 .15rem var(--color);
+        color: var(--color);
+        border-radius: 1rem;
+        background-color: transparent;
+        border-width: 0;
+        width: 10rem;
+    }
+
+    #toggle-game[data-started="false"] {
+        --color: var(--ctp-green);
+        --color-rgb: var(--ctp-green-rgb);
+    }
+
+    #toggle-game[data-started="true"] {
+        --color: var(--ctp-red);
+        --color-rgb: var(--ctp-red-rgb);
+    }
+
+    #toggle-game[data-started="false"]::before {
+        content: "START";
+    }
+
+    #toggle-game[data-started="true"]::before {
+        content: "STOP";
+    }
+
+    #timer {
+        width: 10rem;
+        font-size: 2rem;
+    }
+
+    #timer::before {
+        content: "⏱️ ";
+    }
+
+    main {
+        display: grid;
+        place-items: center;
+        grid-template-rows: 4fr 1fr;
+
+        padding: 3rem;
+        max-width: 60rem;
+        width: 100%;
+        height: 100%;
+    }
+
+    #answer {
+        max-height: 10rem;
+    }
+
+    #answer label {
+        color: var(--fg);
+        font-size: 2rem;
+    }
+
+    #answer-text {
+        --bg-gap: 0.1rem;
+        --bg-thickness: 0.1rem;
+        --color: var(--ctp-teal);
+        --color-rgb: var(--ctp-teal-rgb);
+
+        font-size: 2rem;
+        font-family: Virgil, monospace;
+        padding: 0.5rem 1rem;
+        box-shadow: 0 0 0 .15rem var(--color);
+        color: var(--color);
+        border-radius: 1rem;
+        background-color: transparent;
+        border-width: 0;
+        width: 100%;
+        max-width: 20rem;
+        min-width: 10rem;
+    }
+
+    #answer-text::placeholder {
+        color: rgb(var(--color-rgb), 0.5);
+    }
+
+    #answer-submit {
+        --bg-gap: 0.1rem;
+        --bg-thickness: 0.1rem;
+        --color: var(--ctp-blue);
+        --color-rgb: var(--ctp-blue-rgb);
+
+        font-size: 2rem;
+        font-family: Virgil, monospace;
+        padding: 0.5rem 1rem;
+        box-shadow: 0 0 0 .15rem var(--color);
+        color: var(--color);
+        border-radius: 1rem;
+        background-color: transparent;
+        border-width: 0;
+    }
+
+    #answer-submit::before {
+        content: "Submit";
+    }
+
+    #expression {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        grid-template-columns: 1fr 2fr 3fr;
+        grid-template-areas: "l c r";
+    }
+
+    #expression #left {
+        grid-area: l;
+        font-size: 3rem;
+        color: rgb(var(--fg-rgb), 0.5);
+    }
+
+    #expression #center {
+        grid-area: c;
+        font-size: 6rem;
+        color: rgb(var(--fg-rgb), 0.75);
+    }
+
+    #expression #right {
+        grid-area: r;
+        font-size: 9rem;
+        color: rgb(var(--fg-rgb), 1);
+    }
+
+    .opd {
+        transition: 200ms;
+    }
+
+    .opd[data-changing="false"] {
+        opacity: 0;
+    }
+
+    .opd[data-changing="true"] {
+        opacity: 100%;
+    }
+</style>
+
+</html>
